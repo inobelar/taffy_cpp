@@ -268,9 +268,9 @@ TEST_CASE("test_child_count" * doctest::test_suite("tree"))
     const auto child1 = taffy.new_leaf(Style::Default()).unwrap();
     const auto node = taffy.new_with_children(Style::Default(), mkVec(child0, child1)).unwrap();
 
-    REQUIRE([&] {const auto count = taffy.child_count(node); return count.is_ok() ? count == 2 : false; }());
-    REQUIRE([&] {const auto count = taffy.child_count(child0); return count.is_ok() ? count == 0 : false; }());
-    REQUIRE([&] {const auto count = taffy.child_count(child1); return count.is_ok() ? count == 0 : false; }());
+    REQUIRE([&] {const auto count = taffy.child_count(node);   return count.is_ok() ? count.value() == 2 : false; }());
+    REQUIRE([&] {const auto count = taffy.child_count(child0); return count.is_ok() ? count.value() == 0 : false; }());
+    REQUIRE([&] {const auto count = taffy.child_count(child1); return count.is_ok() ? count.value() == 0 : false; }());
 }
 
 TEST_CASE("test_children" * doctest::test_suite("tree"))

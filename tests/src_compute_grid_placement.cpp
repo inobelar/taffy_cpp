@@ -97,10 +97,10 @@ TEST_CASE("test_only_fixed_placement" * doctest::test_suite("placement"))
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(1), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {0, 1, 0, 1}},
-        {2, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), Auto<GridPlacement>(), line<GridPlacement>(-3), Auto<GridPlacement>())).into_grid_child(), {-1, 0, 0, 1}},
-        {3, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-3), Auto<GridPlacement>(), line<GridPlacement>(-4), Auto<GridPlacement>())).into_grid_child(), {0, 1, -1, 0}},
-        {4, CreateChildTestNode(std::make_tuple(line<GridPlacement>(3), span<GridPlacement>(2), line<GridPlacement>(5), Auto<GridPlacement>())).into_grid_child(), {2, 4, 4, 5}}
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(1), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(),   ExpectedPlacement{0, 1, 0, 1}  },
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), Auto<GridPlacement>(), line<GridPlacement>(-3), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{-1, 0, 0, 1} },
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-3), Auto<GridPlacement>(), line<GridPlacement>(-4), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{0, 1, -1, 0} },
+        ExpectedChildInfo{4, CreateChildTestNode(std::make_tuple(line<GridPlacement>(3), span<GridPlacement>(2), line<GridPlacement>(5), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{2, 4, 4, 5}  }
     };
     const auto expected_cols = TrackCounts { 1, 2, 2 };
     const auto expected_rows = TrackCounts { 1, 2, 3 };
@@ -114,10 +114,10 @@ TEST_CASE("test_placement_spanning_origin" * doctest::test_suite("placement"))
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-1), line<GridPlacement>(-1), line<GridPlacement>(-1), line<GridPlacement>(-1))).into_grid_child(), {2, 3, 2, 3}},
-        {2, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-1), span<GridPlacement>(2), line<GridPlacement>(-1), span<GridPlacement>(2))).into_grid_child(), {2, 4, 2, 4}},
-        {3, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), line<GridPlacement>(-4), line<GridPlacement>(-4), line<GridPlacement>(-4))).into_grid_child(), {-1, 0, -1, 0}},
-        {4, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), span<GridPlacement>(2), line<GridPlacement>(-4), span<GridPlacement>(2))).into_grid_child(), {-1, 1, -1, 1}}
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-1), line<GridPlacement>(-1), line<GridPlacement>(-1), line<GridPlacement>(-1))).into_grid_child(), ExpectedPlacement{2, 3, 2, 3}   },
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-1), span<GridPlacement>(2), line<GridPlacement>(-1), span<GridPlacement>(2))).into_grid_child(),   ExpectedPlacement{2, 4, 2, 4}   },
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), line<GridPlacement>(-4), line<GridPlacement>(-4), line<GridPlacement>(-4))).into_grid_child(), ExpectedPlacement{-1, 0, -1, 0} },
+        ExpectedChildInfo{4, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), span<GridPlacement>(2), line<GridPlacement>(-4), span<GridPlacement>(2))).into_grid_child(),   ExpectedPlacement{-1, 1, -1, 1} }
     };
     const auto expected_cols = TrackCounts { 1, 2, 2 };
     const auto expected_rows = TrackCounts { 1, 2, 2 };
@@ -132,14 +132,14 @@ TEST_CASE("test_only_auto_placement_row_flow" * doctest::test_suite("placement")
     const auto auto_child = CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child();
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, auto_child, {0, 1, 0, 1}},
-        {2, auto_child, {1, 2, 0, 1}},
-        {3, auto_child, {0, 1, 1, 2}},
-        {4, auto_child, {1, 2, 1, 2}},
-        {5, auto_child, {0, 1, 2, 3}},
-        {6, auto_child, {1, 2, 2, 3}},
-        {7, auto_child, {0, 1, 3, 4}},
-        {8, auto_child, {1, 2, 3, 4}}
+        ExpectedChildInfo{1, auto_child, ExpectedPlacement{0, 1, 0, 1} },
+        ExpectedChildInfo{2, auto_child, ExpectedPlacement{1, 2, 0, 1} },
+        ExpectedChildInfo{3, auto_child, ExpectedPlacement{0, 1, 1, 2} },
+        ExpectedChildInfo{4, auto_child, ExpectedPlacement{1, 2, 1, 2} },
+        ExpectedChildInfo{5, auto_child, ExpectedPlacement{0, 1, 2, 3} },
+        ExpectedChildInfo{6, auto_child, ExpectedPlacement{1, 2, 2, 3} },
+        ExpectedChildInfo{7, auto_child, ExpectedPlacement{0, 1, 3, 4} },
+        ExpectedChildInfo{8, auto_child, ExpectedPlacement{1, 2, 3, 4} }
     };
     const auto expected_cols = TrackCounts { 0, 2, 0 };
     const auto expected_rows = TrackCounts { 0, 2, 2 };
@@ -154,14 +154,14 @@ TEST_CASE("test_only_auto_placement_column_flow" * doctest::test_suite("placemen
     const auto auto_child = CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child();
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, auto_child, {0, 1, 0, 1}},
-        {2, auto_child, {0, 1, 1, 2}},
-        {3, auto_child, {1, 2, 0, 1}},
-        {4, auto_child, {1, 2, 1, 2}},
-        {5, auto_child, {2, 3, 0, 1}},
-        {6, auto_child, {2, 3, 1, 2}},
-        {7, auto_child, {3, 4, 0, 1}},
-        {8, auto_child, {3, 4, 1, 2}}
+        ExpectedChildInfo{1, auto_child, ExpectedPlacement{0, 1, 0, 1} },
+        ExpectedChildInfo{2, auto_child, ExpectedPlacement{0, 1, 1, 2} },
+        ExpectedChildInfo{3, auto_child, ExpectedPlacement{1, 2, 0, 1} },
+        ExpectedChildInfo{4, auto_child, ExpectedPlacement{1, 2, 1, 2} },
+        ExpectedChildInfo{5, auto_child, ExpectedPlacement{2, 3, 0, 1} },
+        ExpectedChildInfo{6, auto_child, ExpectedPlacement{2, 3, 1, 2} },
+        ExpectedChildInfo{7, auto_child, ExpectedPlacement{3, 4, 0, 1} },
+        ExpectedChildInfo{8, auto_child, ExpectedPlacement{3, 4, 1, 2} }
     };
     const auto expected_cols = TrackCounts { 0, 2, 2 };
     const auto expected_rows = TrackCounts { 0, 2, 0 };
@@ -175,7 +175,7 @@ TEST_CASE("test_oversized_item" * doctest::test_suite("placement"))
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(span<GridPlacement>(5), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {0, 5, 0, 1}}
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(span<GridPlacement>(5), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{0, 5, 0, 1} }
     };
     const auto expected_cols = TrackCounts { 0, 2, 3 };
     const auto expected_rows = TrackCounts { 0, 2, 0 };
@@ -189,10 +189,10 @@ TEST_CASE("test_fixed_in_secondary_axis" * doctest::test_suite("placement"))
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(span<GridPlacement>(2), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {0, 2, 0, 1}},
-        {2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(), {0, 1, 1, 2}},
-        {3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {2, 3, 0, 1}},
-        {4, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(4), Auto<GridPlacement>())).into_grid_child(), {0, 1, 3, 4}}
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(span<GridPlacement>(2), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{0, 2, 0, 1} },
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{0, 1, 1, 2} },
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{2, 3, 0, 1} },
+        ExpectedChildInfo{4, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(4), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{0, 1, 3, 4} }
     };
     const auto expected_cols = TrackCounts { 0, 2, 1 };
     const auto expected_rows = TrackCounts { 0, 2, 2 };
@@ -206,9 +206,9 @@ TEST_CASE("test_definite_in_secondary_axis_with_fully_definite_negative" * docte
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(), {0, 1, 1, 2}},
-        {1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(), {-1, 0, 1, 2}},
-        {3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {-1, 0, 0, 1}}
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(),   ExpectedPlacement{0, 1, 1, 2}  },
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-4), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{-1, 0, 1, 2} },
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(),   ExpectedPlacement{-1, 0, 0, 1} }
     };
     const auto expected_cols = TrackCounts { 1, 2, 0 };
     const auto expected_rows = TrackCounts { 0, 2, 0 };
@@ -222,9 +222,9 @@ TEST_CASE("test_dense_packing_algorithm" * doctest::test_suite("placement"))
     const auto explicit_row_count = 4;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(2), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {1, 2, 0, 1}}, // Definitely positioned in column 2
-        {2, CreateChildTestNode(std::make_tuple(span<GridPlacement>(2), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {2, 4, 0, 1}}, // Spans 2 columns, so positioned after item 1
-        {3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {0, 1, 0, 1}} // Spans 1 column, so should be positioned before item 1
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(2), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{1, 2, 0, 1} }, // Definitely positioned in column 2
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(span<GridPlacement>(2), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{2, 4, 0, 1} }, // Spans 2 columns, so positioned after item 1
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(),   ExpectedPlacement{0, 1, 0, 1} } // Spans 1 column, so should be positioned before item 1
     };
     const auto expected_cols = TrackCounts { 0, 4, 0 };
     const auto expected_rows = TrackCounts { 0, 4, 0 };
@@ -238,9 +238,9 @@ TEST_CASE("test_sparse_packing_algorithm" * doctest::test_suite("placement"))
     const auto explicit_row_count = 4;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(3), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {0, 3, 0, 1}}, // Width 3
-        {2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(3), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {0, 3, 1, 2}}, // Width 3 (wraps to next row)
-        {3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(1), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {3, 4, 1, 2}}  // Width 1 (uses second row as we're already on it)
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(3), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{0, 3, 0, 1} }, // Width 3
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(3), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{0, 3, 1, 2} }, // Width 3 (wraps to next row)
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), span<GridPlacement>(1), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), ExpectedPlacement{3, 4, 1, 2} }  // Width 1 (uses second row as we're already on it)
     };
     const auto expected_cols = TrackCounts { 0, 4, 0 };
     const auto expected_rows = TrackCounts { 0, 4, 0 };
@@ -254,9 +254,9 @@ TEST_CASE("test_auto_placement_in_negative_tracks" * doctest::test_suite("placem
     const auto explicit_row_count = 2;
     const auto children = Vec<ExpectedChildInfo> {
         // output order, node, style (grid coords), expected_placement (oz coords)
-        {1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-5), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(), {-2, -1, 0, 1}}, // Row 1. Definitely positioned in column -2
-        {2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(), {-2, -1, 1, 2}},   // Row 2. Auto positioned in column -2
-        {3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(), {-1, 0, 0, 1}}      // Row 1. Auto positioned in column -1
+        ExpectedChildInfo{1, CreateChildTestNode(std::make_tuple(line<GridPlacement>(-5), Auto<GridPlacement>(), line<GridPlacement>(1), Auto<GridPlacement>())).into_grid_child(),ExpectedPlacement{-2, -1, 0, 1} }, // Row 1. Definitely positioned in column -2
+        ExpectedChildInfo{2, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), line<GridPlacement>(2), Auto<GridPlacement>())).into_grid_child(),  ExpectedPlacement{-2, -1, 1, 2} }, // Row 2. Auto positioned in column -2
+        ExpectedChildInfo{3, CreateChildTestNode(std::make_tuple(Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>(), Auto<GridPlacement>())).into_grid_child(),   ExpectedPlacement{-1, 0, 0, 1}  }  // Row 1. Auto positioned in column -1
     };
     const auto expected_cols = TrackCounts { 2, 2, 0 };
     const auto expected_rows = TrackCounts { 0, 2, 0 };

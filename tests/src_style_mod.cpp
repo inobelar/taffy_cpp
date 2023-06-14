@@ -8,6 +8,8 @@
 
 #include <taffy/util/sys/Vec.hpp>
 
+#include <typeinfo> // for: typeid(T).name()
+
 using namespace taffy;
 
 TEST_CASE("defaults_match" * doctest::test_suite("style"))
@@ -90,24 +92,35 @@ TEST_CASE("defaults_match" * doctest::test_suite("style"))
 template <typename T>
 inline void assert_type_size(size_t expected_size)
 {
-    REQUIRE(sizeof(T) == expected_size);
+    constexpr size_t mem_size_of_T = sizeof(T);
 
-    /* TODO: make it with message like in Rust:
-        assert_eq!(
-            ::core::mem::size_of::<T>(),
-            expected_size,
-            "Expected {} for be {} byte(s) but it was {} byte(s)",
-            name,
-            expected_size,
-            ::core::mem::size_of::<T>(),
-        );
-    */
+    // NOTE: if its will be `char*` - it will be printe by 'doctest' as pointer.
+    // TODO: maybe here we need to add demangling, to print, for example "taffy::Style", instead of "N5taffy5StyleE"
+    const std::string name = typeid(T).name();
+
+    REQUIRE_MESSAGE(
+        mem_size_of_T == expected_size,
+
+        "Expected ", name, " for be ", expected_size, " byte(s) but it was ", mem_size_of_T, " byte(s)"
+    );
 }
 
 // NOTE: Please feel free the update the sizes in this test as required. This test is here to prevent unintentional size changes
 // and to serve as accurate up-to-date documentation on the sizes.
 TEST_CASE("style_sizes" * doctest::test_suite("style"))
 {
+    // via: https://stackoverflow.com/a/1505839/
+    #if INTPTR_MAX == INT32_MAX
+        #define ENVIRONMENT_IS_32_BIT
+        #pragma message("Environment is 32-bit")
+    #elif INTPTR_MAX == INT64_MAX
+        #define ENVIRONMENT_IS_64_BIT
+        #pragma message("Environment is 64-bit")
+    #else
+        #error "Environment not 32 or 64-bit."
+    #endif
+
+
     // Display and Position
     assert_type_size<Display>(1);
     assert_type_size<Position>(1);
@@ -142,9 +155,16 @@ TEST_CASE("style_sizes" * doctest::test_suite("style"))
         assert_type_size<MinTrackSizingFunction>(12);         // TODO: must be 8
         assert_type_size<MaxTrackSizingFunction>(12);
         assert_type_size<NonRepeatedTrackSizingFunction>(24); // TODO: must be 20
-        assert_type_size<TrackSizingFunction>(56);            // TODO: must be 32
-        assert_type_size<Vec<NonRepeatedTrackSizingFunction>>(24);
-        assert_type_size<Vec<TrackSizingFunction>>(24);
+
+        #if defined(ENVIRONMENT_IS_32_BIT)
+            assert_type_size<TrackSizingFunction>(44); // TODO: must be 32
+            assert_type_size<Vec<NonRepeatedTrackSizingFunction>>(12); // NOTE: in Rust its `24`, in C++ its `12` in 32-bit :)
+            assert_type_size<Vec<TrackSizingFunction>>(12);            // NOTE: in Rust its `24`, in C++ its `12` in 32-bit :)
+        #elif defined(ENVIRONMENT_IS_64_BIT)
+            assert_type_size<TrackSizingFunction>(56); // TODO: must be 32
+            assert_type_size<Vec<NonRepeatedTrackSizingFunction>>(24);
+            assert_type_size<Vec<TrackSizingFunction>>(24);
+        #endif
 
         // CSS Grid Item
         assert_type_size<GridPlacement>(4);
@@ -152,5 +172,9 @@ TEST_CASE("style_sizes" * doctest::test_suite("style"))
     #endif // TAFFY_FEATURE_GRID
 
     // Overall
-    assert_type_size<Style>(368); // Note: In Rust it's `352`, in C++ it's `368`
+    #if defined(ENVIRONMENT_IS_32_BIT)
+        assert_type_size<Style>(312); // NOTE: In Rust its `352`, in C++ its `312` in 32-bit :)
+    #elif defined(ENVIRONMENT_IS_64_BIT)
+        assert_type_size<Style>(368); // NOTE: In Rust its `352`, in C++ its `368` in 64-bit :(
+    #endif
 }
