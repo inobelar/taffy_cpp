@@ -22,7 +22,7 @@ struct BlockAlgorithm
     static inline SizeBaselinesAndMargins LayoutAlgorithm_impl_perform_layout(
         LayoutTree& tree,
         NodeId node,
-        const Size<Option<float >>& known_dimensions,
+        const Size<Option<float>>& known_dimensions,
         const Size<Option<float>>& parent_size,
         const Size<AvailableSpace>& available_space,
         SizingMode /*_sizing_mode*/,
@@ -43,7 +43,7 @@ struct BlockAlgorithm
     static inline Size<float> LayoutAlgorithm_impl_measure_size(
         LayoutTree& tree,
         NodeId node,
-        const Size<Option<float >>& known_dimensions,
+        const Size<Option<float>>& known_dimensions,
         const Size<Option<float>>& parent_size,
         const Size<AvailableSpace>& available_space,
         SizingMode /*_sizing_mode*/,
