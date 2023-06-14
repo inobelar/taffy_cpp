@@ -731,10 +731,10 @@ inline void perform_absolute_layout_on_absolute_children(
             };
 
             return Rect<float> {
-                /*left:*/ margin.left.map<float>([](float) { return 0.0; }).unwrap_or(auto_margin_size.width),
-                /*right:*/ margin.right.map<float>([](float) { return 0.0; }).unwrap_or(auto_margin_size.width),
-                /*top:*/ margin.top.map<float>([](float) { return 0.0; }).unwrap_or(auto_margin_size.height),
-                /*bottom:*/ margin.bottom.map<float>([](float) { return 0.0; }).unwrap_or(auto_margin_size.height)
+                /*left:*/ margin.left.map<float>([](float) { return 0.0f; }).unwrap_or(auto_margin_size.width),
+                /*right:*/ margin.right.map<float>([](float) { return 0.0f; }).unwrap_or(auto_margin_size.width),
+                /*top:*/ margin.top.map<float>([](float) { return 0.0f; }).unwrap_or(auto_margin_size.height),
+                /*bottom:*/ margin.bottom.map<float>([](float) { return 0.0f; }).unwrap_or(auto_margin_size.height)
             };
         }();
 
