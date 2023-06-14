@@ -1,0 +1,1 @@
+A cache for storing the results of layout computation

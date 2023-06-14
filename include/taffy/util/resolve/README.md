@@ -1,0 +1,1 @@
+Helper trait to calculate dimensions during layout resolution

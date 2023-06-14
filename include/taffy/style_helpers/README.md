@@ -1,0 +1,1 @@
+Helper functions which it make it easier to create instances of types in the `style` and `geometry` modules.

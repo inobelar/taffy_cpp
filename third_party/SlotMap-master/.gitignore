@@ -1,0 +1,6 @@
+*.user
+*.filters
+*.vcxproj
+Debug
+Release
+v15

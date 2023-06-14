@@ -1,0 +1,1 @@
+Taffy uses two coordinate systems to refer to grid lines (the gaps/gutters between rows/columns)

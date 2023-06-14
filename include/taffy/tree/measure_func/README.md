@@ -1,0 +1,1 @@
+Measure function type and trait definitions
