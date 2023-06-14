@@ -32,7 +32,7 @@ example: if your project in C++, and you want to use [Taffy][taffy_url]
 
 In short - `taffy_cpp` is a 'mirror', 'reflection' or 'back-port' of 
 [Taffy][taffy_url] library, to provide ability of usage of it's brilliant 
-algorithms in other (non-Rust) enviroments or toolchains. 
+algorithms in other (non-Rust) environments or toolchains. 
 
 If you want to add any feature or bug-fix - first of all propose changes into 
 [Taffy][taffy_url] project. If they are accepted, next (if it's possible) - they 
@@ -105,7 +105,7 @@ read [third_party/README.md](./third_party/README.md).
   'applicability'. In our imperfect world, there is an incredible number of 
   devices (with various architectures) under which you can compile C++ code, 
   but vendor's compiler may supports only good old `C++11` or `C`. I mean 
-  microelectronics or various outdate systems that cannot be easily updated.
+  microelectronics or various outdated systems that cannot be easily updated.
 
   Once you find yourself in a situation where you need to do something useful 
   in such harsh conditions, you will thank God that we still have useful 
@@ -113,7 +113,7 @@ read [third_party/README.md](./third_party/README.md).
   
   However, the code also has to be written under severe restrictions, without 
   the features introduced in the new standards (like better constexpr rules
-  inroduced since `C++17`, or `concepts` from `C++20`), and with usage of
+  Introduced since `C++17`, or `concepts` from `C++20`), and with usage of
   third-party libraries that back-port needed functionality from next standards.
 
   Also, this does not mean that we are stuck on the 'old' `C++11` standard -
@@ -131,12 +131,12 @@ read [third_party/README.md](./third_party/README.md).
 
 - **Question**: Why this library written in 'header-only' manner?
 - **Answer**: Let's take a look at some advantages and disadvantages (that I was
-  able to quickly come up with) of header-only library disribution:
+  able to quickly come up with) of header-only library distribution:
 
     - Advantages:
         - Header-only library easier to integrate, since user need to specify 
           only include path in build system, instead of building library first 
-          as static or shared library, than use public headers & link over it.
+          as static or shared library, then use public headers & link over it.
 
         - Header-only library easier to configure, since user only need to add 
           defines into build system, instead of building a library with special 
@@ -146,26 +146,26 @@ read [third_party/README.md](./third_party/README.md).
         - Header-only library is suitable for code that contains a lot of 
           templates and constexpr functions (that this project abounds in).
 
-        - Header-only library is easier to 'amalgamate' into single header file,
+        - Header-only library is easier to 'amalgamate' into a single header file,
           that also makes it much easier to distribute & integrate.
 
-        - Header-only library provides for compiler all it's sources, and during
-          built it may easily throw out unused code, that cannot removed from
+        - Header-only library provides for compiler all its sources, and during
+          built it may easily throw out unused code, that cannot be removed from
           already built shared library.
 
-    - Disadvantates:
+    - Disadvantages:
         - We cannot easily specify special compilation flags when using 
-          header-only library, for example: build it with with extra 
-          optimization due to high perfomance needs. In case of shared or static
-          library, we can easily built it with `-O3` or `-ffast-math` without
+          header-only library, for example: build it with extra 
+          optimization due to high performance needs. In case of shared or static
+          library, we can easily build it with `-O3` or `-ffast-math` without
           changing build rules for rest of the user project code.
           - As workaround for it, header-only library may be build separately,
-            with exposing API only via C interface. Also it's suitable for FFI.
+            with exposing API only via C interface. Also, it's suitable for FFI.
 
         - Header-only library slightly increases compilation time
 
         - In non-header-only library easier to resolve circular types 
-          dependencies, by moving dependant code into source files.
+          dependencies, by moving dependent code into source files.
 
   **TL;DR**: I see a struggle here between two important properties:
   - Simple integration, configuration, distribution;
