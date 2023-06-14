@@ -6,13 +6,13 @@
 
 </div>
 
-This library is a port of excellent Rust-written [Taffy](taffy_url) UI layout
+This library is a port of excellent Rust-written [Taffy][taffy_url] UI layout
 library for C++.
 
 The main goals of this library are:
-- Provide all the features (or almost all) of the [Taffy](taffy_url) library 
+- Provide all the features (or almost all) of the [Taffy][taffy_url] library 
   (with similar API) but for C++ projects.
-- Behave exactly like [Taffy](taffy_url) and pass all tests.
+- Behave exactly like [Taffy][taffy_url] and pass all tests.
 - Be the same fast and achieve same cross-platform support (or even wider).
 
 <!--
@@ -23,24 +23,24 @@ The main goals of this library are:
   > Go, Swift, Kotlin, Rust, and many more. Developers that can use one of these
   > existing languages should.
 -->
-If you _**can**_ use [Taffy](taffy_url) (if your project written in Rust, or can
+If you _**can**_ use [Taffy][taffy_url] (if your project written in Rust, or can
 be easily linked with it) - you **should** use it! If you _**can't**_ (for
-example: if your project in C++, and you want to use [Taffy](taffy_url)
+example: if your project in C++, and you want to use [Taffy][taffy_url]
 'directly' - without linking or wrapping) - `taffy_cpp` **for you**! :)
 
 ----
 
 In short - `taffy_cpp` is a 'mirror', 'reflection' or 'back-port' of 
-[Taffy](taffy_url) library, to provide ability of usage of it's brilliant 
+[Taffy][taffy_url] library, to provide ability of usage of it's brilliant 
 algorithms in other (non-Rust) enviroments or toolchains. 
 
 If you want to add any feature or bug-fix - first of all propose changes into 
-[Taffy](taffy_url) project. If they are accepted, next (if it's possible) - they 
+[Taffy][taffy_url] project. If they are accepted, next (if it's possible) - they 
 will be ported into `taffy_cpp`.
-This project aims to be a 'reflection' of [Taffy](taffy_url) (and be compatible 
+This project aims to be a 'reflection' of [Taffy][taffy_url] (and be compatible 
 and similar to it as close as possible), not a separated incompatible standalone
 entity. In `taffy_cpp` considered only changes that improve code similarity 
-(with [Taffy](taffy_url)) or improve performance and safety.
+(with [Taffy][taffy_url]) or improve performance and safety.
 
 ----
 
@@ -49,12 +49,12 @@ put a 'star' :star: for this project on GitHub. Instead of saying thanks, this
 way you will show that this project is **in demand**, and you can also see how 
 many of the same users need it. 
 
-Don't forget to add the [Taffy](taffy_url) 'star' :star: too! The great work in
+Don't forget to add the [Taffy][taffy_url] 'star' :star: too! The great work in
 that repository is the reason why `taffy_cpp` even exists.
 
 ----
 
-Notice, that [Taffy](taffy_url) in the future may have FFI interface (exposing
+Notice, that [Taffy][taffy_url] in the future may have FFI interface (exposing
 its API via C interface - for bindings with other languages), and
 [gccrs](https://github.com/Rust-GCC/gccrs) promisingly evolve, but `taffy_cpp`
 still may be needed for those, who prefer simple C++ alternative.
@@ -65,7 +65,7 @@ supported by a big company and used in many projects in various languages).
 
 ## Version
 
-Current state of this library sources reflects the state of [Taffy](taffy_url) 
+Current state of this library sources reflects the state of [Taffy][taffy_url] 
 sources tree for:
 
 - Commit: [46546b26777ca14669ba079a307f9c0b5d9a8854](https://github.com/DioxusLabs/taffy/tree/46546b26777ca14669ba079a307f9c0b5d9a8854)
