@@ -113,7 +113,7 @@ read [third_party/README.md](./third_party/README.md).
   
   However, the code also has to be written under severe restrictions, without 
   the features introduced in the new standards (like better constexpr rules
-  Introduced since `C++17`, or `concepts` from `C++20`), and with usage of
+  introduced since `C++17`, or `concepts` from `C++20`), and with usage of
   third-party libraries that back-port needed functionality from next standards.
 
   Also, this does not mean that we are stuck on the 'old' `C++11` standard -
