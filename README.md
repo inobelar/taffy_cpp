@@ -170,6 +170,7 @@ read [third_party/README.md](./third_party/README.md).
   **TL;DR**: I see a struggle here between two important properties:
   - Simple integration, configuration, distribution;
   - Simple compilation fine-tuning.
+  
   Fine-tuning may be achieved by extra wrapping or in some other way, so I 
   prefer header-only manner to achieve easier usage.
 
