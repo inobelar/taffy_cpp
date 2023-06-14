@@ -84,8 +84,8 @@ sources tree for:
 | `TAFFY_FEATURE_PROFILE`      | Enable some additional debug printing during layout algorithm execution
 | `TAFFY_CONFIG_TEST`          | Enable extra printing in 'tests'
 |                              |
-| `TAFFY_CONFIG_PANIC_UNWIND`  | (default) In case of `panic` called `assert(false)` with stack unwinding
-| `TAFFY_CONFIG_PANIC_ABORT`   | In case of panic called `std::abort()` (causes `SIGABRT` signal throwing)
+| `TAFFY_CONFIG_PANIC_UNWIND`  | (default) In case of `panic` - called `assert(false)` with stack unwinding
+| `TAFFY_CONFIG_PANIC_ABORT`   | In case of `panic` - called `std::abort()` (causes `SIGABRT` signal throwing)
 
 ## Dependencies
 
