@@ -815,6 +815,91 @@ def replace_slice(match):
 
     return r'mkVec(' + content + ')'
 
+# Replaces:
+#   assert_eq!(location.x, 0.0f, "x of node {:?}. Expected {}. Actual {}", node1, 0.0f, location.x);
+# with:
+#   REQUIRE_MESSAGE(location.x == 0.0f, "x of node ", Debug(node1), ". Expected ", 0.0f, ". Actual ", location.x)
+def replace_assert_eq(content: str) -> str:
+
+    def replace(matched) -> str:
+        var_a : str              = matched.group(1)
+        var_b : str              = matched.group(2)
+        message_format_str : str = matched.group(3)
+        message_params_str : str = matched.group(4)
+
+        # Remove trailing comma: 1) split by ',' 2) trim 3) remove empty 4) join by ', '
+        # via: https://stackoverflow.com/a/28534179/
+        params_stripped = (item.strip() for item in message_params_str.split(','))
+        params = [item for item in params_stripped if item]
+
+        message_parts : List(str) = re.split(r'({:\?}|{})', message_format_str)
+
+        param_idx : int = 0
+        for i, part in enumerate(message_parts):
+            if message_parts[i] == '{:?}':
+                message_parts[i] = 'Debug(' + params[param_idx] + ')'
+                param_idx += 1
+            elif message_parts[i] == '{}':
+                message_parts[i] = params[param_idx]
+                param_idx += 1
+            else:
+                if message_parts[i].startswith('"') == False:
+                    message_parts[i] = '"' + message_parts[i]
+                if message_parts[i].endswith('"') == False:
+                    message_parts[i] = message_parts[i] + '"'
+
+        message_parts = list(filter(lambda part : part != '"', message_parts)) # Remove trailing '"'
+        message = ', '.join(message_parts)
+
+        return 'REQUIRE_MESSAGE(' + var_a + ' == ' + var_b + ', ' + message + ');'
+
+    return re.sub(
+        r'assert_eq!\(([^,]+),\s*([^,]+),\s*(\"[^\"]+\"),\s*([^\)]+)\);',
+        replace,
+        content)
+
+# Replaces:
+#   assert!(size.width - 200f32 < 0.1, "width of node {:?}. Expected {}. Actual {}", node, 200f32, size.width);
+# with:
+#   REQUIRE_MESSAGE(size.width - 200f32 < 0.1, "width of node ", Debug(node), ". Expected ", 200f32, ". Actual ", size.width);
+def replace_assert(content: str) -> str:
+
+    def replace(matched) -> str:
+        expression : str         = matched.group(1)
+        message_format_str : str = matched.group(2)
+        message_params_str : str = matched.group(3)
+
+        # Remove trailing comma: 1) split by ',' 2) trim 3) remove empty 4) join by ', '
+        # via: https://stackoverflow.com/a/28534179/
+        params_stripped = (item.strip() for item in message_params_str.split(','))
+        params = [item for item in params_stripped if item]
+
+        message_parts : List(str) = re.split(r'({:\?}|{})', message_format_str)
+
+        param_idx : int = 0
+        for i, part in enumerate(message_parts):
+            if message_parts[i] == '{:?}':
+                message_parts[i] = 'Debug(' + params[param_idx] + ')'
+                param_idx += 1
+            elif message_parts[i] == '{}':
+                message_parts[i] = params[param_idx]
+                param_idx += 1
+            else:
+                if message_parts[i].startswith('"') == False:
+                    message_parts[i] = '"' + message_parts[i]
+                if message_parts[i].endswith('"') == False:
+                    message_parts[i] = message_parts[i] + '"'
+
+        message_parts = list(filter(lambda part : part != '"', message_parts)) # Remove trailing '"'
+        message = ', '.join(message_parts)
+
+        return 'REQUIRE_MESSAGE(' + expression + ', ' + message + ');'
+
+    return re.sub(
+        r'assert!\(([^,]+),\s*(\"[^\"]+\"),\s*([^\)]+)\);',
+        replace,
+        content)
+
 def convert_test_content(file_content):
 
     # fn test_name() { --> TEST_CASE("test_name") {
@@ -854,14 +939,8 @@ def convert_test_content(file_content):
     # println!("\nComputed tree:") --> puts("\nComputed tree:")
     file_content = re.sub(r'println!\((\"[^\"]+\")\)', r'puts(\1)', file_content)
 
-    file_content = re.sub(
-        r'assert_eq!\(([^,]+), ([^,]+), (\"[^\"]+\"), ([^\)]+)\);', 
-        r'REQUIRE(\1 == \2); // TODO: message: \3, \4', 
-        file_content)
-    file_content = re.sub(
-        r'assert!\(\s*([^,]+),\s*(\"[^\"]+\"),\s*([^\)]+),\s*([^,]+),\s*([^,]+)\s*\);',
-        r'REQUIRE(\1); // TODO: message: \2, \3, \4, \5',
-        file_content)
+    file_content = replace_assert_eq(file_content)
+    file_content = replace_assert(file_content)
 
     # in 'regex101' it requires '/Ug' - g:global + U:Ungreedy for lazy evaluation.
     file_content = re.sub(

@@ -24,18 +24,18 @@ TEST_CASE("padding_border_overrides_size_flex_basis_0_growable") {
     print_tree(taffy, node);
     puts("");
     { const Layout& l = taffy.layout(node).unwrap().get(); size = l.size; location = l.location; }
-    REQUIRE(size.width == 34.0f); // TODO: message: "width of node {:?}. Expected {}. Actual {}", node, 34.0f, size.width
-    REQUIRE(size.height == 14.0f); // TODO: message: "height of node {:?}. Expected {}. Actual {}", node, 14.0f, size.height
-    REQUIRE(location.x == 0.0f); // TODO: message: "x of node {:?}. Expected {}. Actual {}", node, 0.0f, location.x
-    REQUIRE(location.y == 0.0f); // TODO: message: "y of node {:?}. Expected {}. Actual {}", node, 0.0f, location.y
+    REQUIRE_MESSAGE(size.width == 34.0f, "width of node ", Debug(node), ". Expected ", 34.0f, ". Actual ", size.width);
+    REQUIRE_MESSAGE(size.height == 14.0f, "height of node ", Debug(node), ". Expected ", 14.0f, ". Actual ", size.height);
+    REQUIRE_MESSAGE(location.x == 0.0f, "x of node ", Debug(node), ". Expected ", 0.0f, ". Actual ", location.x);
+    REQUIRE_MESSAGE(location.y == 0.0f, "y of node ", Debug(node), ". Expected ", 0.0f, ". Actual ", location.y);
     { const Layout& l = taffy.layout(node0).unwrap().get(); size = l.size; location = l.location; }
-    REQUIRE(size.width == 28.0f); // TODO: message: "width of node {:?}. Expected {}. Actual {}", node0, 28.0f, size.width
-    REQUIRE(size.height == 14.0f); // TODO: message: "height of node {:?}. Expected {}. Actual {}", node0, 14.0f, size.height
-    REQUIRE(location.x == 0.0f); // TODO: message: "x of node {:?}. Expected {}. Actual {}", node0, 0.0f, location.x
-    REQUIRE(location.y == 0.0f); // TODO: message: "y of node {:?}. Expected {}. Actual {}", node0, 0.0f, location.y
+    REQUIRE_MESSAGE(size.width == 28.0f, "width of node ", Debug(node0), ". Expected ", 28.0f, ". Actual ", size.width);
+    REQUIRE_MESSAGE(size.height == 14.0f, "height of node ", Debug(node0), ". Expected ", 14.0f, ". Actual ", size.height);
+    REQUIRE_MESSAGE(location.x == 0.0f, "x of node ", Debug(node0), ". Expected ", 0.0f, ". Actual ", location.x);
+    REQUIRE_MESSAGE(location.y == 0.0f, "y of node ", Debug(node0), ". Expected ", 0.0f, ". Actual ", location.y);
     { const Layout& l = taffy.layout(node1).unwrap().get(); size = l.size; location = l.location; }
-    REQUIRE(size.width == 6.0f); // TODO: message: "width of node {:?}. Expected {}. Actual {}", node1, 6.0f, size.width
-    REQUIRE(size.height == 12.0f); // TODO: message: "height of node {:?}. Expected {}. Actual {}", node1, 12.0f, size.height
-    REQUIRE(location.x == 28.0f); // TODO: message: "x of node {:?}. Expected {}. Actual {}", node1, 28.0f, location.x
-    REQUIRE(location.y == 0.0f); // TODO: message: "y of node {:?}. Expected {}. Actual {}", node1, 0.0f, location.y
+    REQUIRE_MESSAGE(size.width == 6.0f, "width of node ", Debug(node1), ". Expected ", 6.0f, ". Actual ", size.width);
+    REQUIRE_MESSAGE(size.height == 12.0f, "height of node ", Debug(node1), ". Expected ", 12.0f, ". Actual ", size.height);
+    REQUIRE_MESSAGE(location.x == 28.0f, "x of node ", Debug(node1), ". Expected ", 28.0f, ". Actual ", location.x);
+    REQUIRE_MESSAGE(location.y == 0.0f, "y of node ", Debug(node1), ". Expected ", 0.0f, ". Actual ", location.y);
 }

@@ -25,13 +25,13 @@ TEST_CASE("grid_absolute_column_start") {
     print_tree(taffy, node);
     puts("");
     { const Layout& l = taffy.layout(node).unwrap().get(); size = l.size; location = l.location; }
-    REQUIRE(size.width == 180.0f); // TODO: message: "width of node {:?}. Expected {}. Actual {}", node, 180.0f, size.width
-    REQUIRE(size.height == 160.0f); // TODO: message: "height of node {:?}. Expected {}. Actual {}", node, 160.0f, size.height
-    REQUIRE(location.x == 0.0f); // TODO: message: "x of node {:?}. Expected {}. Actual {}", node, 0.0f, location.x
-    REQUIRE(location.y == 0.0f); // TODO: message: "y of node {:?}. Expected {}. Actual {}", node, 0.0f, location.y
+    REQUIRE_MESSAGE(size.width == 180.0f, "width of node ", Debug(node), ". Expected ", 180.0f, ". Actual ", size.width);
+    REQUIRE_MESSAGE(size.height == 160.0f, "height of node ", Debug(node), ". Expected ", 160.0f, ". Actual ", size.height);
+    REQUIRE_MESSAGE(location.x == 0.0f, "x of node ", Debug(node), ". Expected ", 0.0f, ". Actual ", location.x);
+    REQUIRE_MESSAGE(location.y == 0.0f, "y of node ", Debug(node), ". Expected ", 0.0f, ". Actual ", location.y);
     { const Layout& l = taffy.layout(node0).unwrap().get(); size = l.size; location = l.location; }
-    REQUIRE(size.width == 133.0f); // TODO: message: "width of node {:?}. Expected {}. Actual {}", node0, 133.0f, size.width
-    REQUIRE(size.height == 157.0f); // TODO: message: "height of node {:?}. Expected {}. Actual {}", node0, 157.0f, size.height
-    REQUIRE(location.x == 44.0f); // TODO: message: "x of node {:?}. Expected {}. Actual {}", node0, 44.0f, location.x
-    REQUIRE(location.y == 1.0f); // TODO: message: "y of node {:?}. Expected {}. Actual {}", node0, 1.0f, location.y
+    REQUIRE_MESSAGE(size.width == 133.0f, "width of node ", Debug(node0), ". Expected ", 133.0f, ". Actual ", size.width);
+    REQUIRE_MESSAGE(size.height == 157.0f, "height of node ", Debug(node0), ". Expected ", 157.0f, ". Actual ", size.height);
+    REQUIRE_MESSAGE(location.x == 44.0f, "x of node ", Debug(node0), ". Expected ", 44.0f, ". Actual ", location.x);
+    REQUIRE_MESSAGE(location.y == 1.0f, "y of node ", Debug(node0), ". Expected ", 1.0f, ". Actual ", location.y);
 }
