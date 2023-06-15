@@ -105,13 +105,7 @@ target_include_directories(taffy_tests PRIVATE
 
 add_subdirectory(../ taffy_lib_dir)
 
-# FIXME: have no idea why, but without this line, taffy's third-party include
-# pathes not added, and it produces compile errors
 target_link_libraries(taffy_tests PRIVATE taffy)
-
-target_include_directories(taffy_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../include/
-)
 
 target_compile_definitions(taffy_tests PRIVATE TAFFY_FEATURE_BLOCK_LAYOUT)
 target_compile_definitions(taffy_tests PRIVATE TAFFY_FEATURE_FLEXBOX)
