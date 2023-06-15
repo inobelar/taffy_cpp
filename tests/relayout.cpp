@@ -77,7 +77,7 @@ TEST_CASE("toggle_root_display_none" * doctest::test_suite("relayout"))
 
     // Setup
     auto taffy = Taffy::New();
-    const auto node = taffy.new_leaf(hidden_style).unwrap(); // TODO: hidden_style.clone() here
+    const auto node = taffy.new_leaf(hidden_style).unwrap();
 
     // Layout 1 (None)
     taffy.compute_layout(node, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
@@ -159,8 +159,8 @@ TEST_CASE("toggle_flex_child_display_none" * doctest::test_suite("relayout"))
 
     // Setup
     auto taffy = Taffy::New();
-    const auto node = taffy.new_leaf(hidden_style).unwrap(); // TODO: hidden_style.clone() here
-    const auto root = taffy.new_with_children(flex_style, mkVec(node)).unwrap(); // TODO: hidden_style.clone() here
+    const auto node = taffy.new_leaf(hidden_style).unwrap();
+    const auto root = taffy.new_with_children(flex_style, mkVec(node)).unwrap();
 
     // Layout 1 (None)
     taffy.compute_layout(root, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
@@ -209,8 +209,8 @@ TEST_CASE("toggle_flex_container_display_none" * doctest::test_suite("relayout")
 
     // Setup
     auto taffy = Taffy::New();
-    const auto node = taffy.new_leaf(hidden_style).unwrap(); // TODO: hidden_style.clone() here
-    const auto root = taffy.new_with_children(hidden_style, mkVec(node)).unwrap(); // TODO: hidden_style.clone() here
+    const auto node = taffy.new_leaf(hidden_style).unwrap();
+    const auto root = taffy.new_with_children(hidden_style, mkVec(node)).unwrap();
 
     // Layout 1 (None)
     taffy.compute_layout(root, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
@@ -259,8 +259,8 @@ TEST_CASE("toggle_grid_child_display_none" * doctest::test_suite("relayout"))
 
     // Setup
     auto taffy = Taffy::New();
-    const auto node = taffy.new_leaf(hidden_style).unwrap(); // TODO: hidden_style.clone() here
-    const auto root = taffy.new_with_children(grid_style, mkVec(node)).unwrap(); // TODO: grid_style.clone() here
+    const auto node = taffy.new_leaf(hidden_style).unwrap();
+    const auto root = taffy.new_with_children(grid_style, mkVec(node)).unwrap();
 
     // Layout 1 (None)
     taffy.compute_layout(root, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
@@ -309,8 +309,8 @@ TEST_CASE("toggle_grid_container_display_none" * doctest::test_suite("relayout")
 
     // Setup
     auto taffy = Taffy::New();
-    const auto node = taffy.new_leaf(hidden_style).unwrap(); // TODO: hidden_style.clone() here
-    const auto root = taffy.new_with_children(hidden_style, mkVec(node)).unwrap(); // TODO: hidden_style.clone() here
+    const auto node = taffy.new_leaf(hidden_style).unwrap();
+    const auto root = taffy.new_with_children(hidden_style, mkVec(node)).unwrap();
 
     // Layout 1 (None)
     taffy.compute_layout(root, Size<AvailableSpace>::MAX_CONTENT()).unwrap();

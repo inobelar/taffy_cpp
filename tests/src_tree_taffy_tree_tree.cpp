@@ -305,7 +305,7 @@ TEST_CASE("test_style" * doctest::test_suite("tree"))
 
     const auto style = StyleBuilder([](Style& s) { s.display = Display::None(); s.flex_direction = FlexDirection::RowReverse(); });
 
-    auto node = taffy.new_leaf(style).unwrap(); // TODO: style.clone() here
+    auto node = taffy.new_leaf(style).unwrap();
 
     const auto res = taffy.style(node);
     REQUIRE(res.is_ok());

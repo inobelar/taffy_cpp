@@ -64,7 +64,7 @@ void placement_test_runner(
     );
 
     // Assert that each item has been placed in the right location
-    auto sorted_children = children; // TODO: '.clone();' was here
+    auto sorted_children = children;
 
     // sorted_children.sort_by_key(|child| child.0);
     // NOTE: std::stable_sort() here, since Rust docs says `sort_by_key' is stable
@@ -80,14 +80,14 @@ void placement_test_runner(
 
         REQUIRE(item.node == NodeId::from(id));
         const auto actual_placement = std::make_tuple(item.column.start, item.column.end, item.row.start, item.row.end);
-        REQUIRE(actual_placement == CreateExpectedPlacement(expected_placement).into_oz()); // TODO: add message: "Item {idx} (0-indexed)"
+        REQUIRE_MESSAGE(actual_placement == CreateExpectedPlacement(expected_placement).into_oz(), "Item ", idx, " (0-indexed)");
     }
 
     // Assert that the correct number of implicit rows have been generated
     const auto actual_row_counts = cell_occupancy_matrix.track_counts(AbsoluteAxis::Vertical());
-    REQUIRE(actual_row_counts == expected_row_counts); // TODO: add message "row track counts"
+    REQUIRE_MESSAGE(actual_row_counts == expected_row_counts, "row track counts");
     const auto actual_col_counts = cell_occupancy_matrix.track_counts(AbsoluteAxis::Horizontal());
-    REQUIRE(actual_col_counts == expected_col_counts); // TODO: add message "column track counts"
+    REQUIRE_MESSAGE(actual_col_counts == expected_col_counts, "column track counts");
 }
 
 TEST_CASE("test_only_fixed_placement" * doctest::test_suite("placement"))

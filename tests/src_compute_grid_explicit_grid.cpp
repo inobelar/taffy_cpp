@@ -213,7 +213,7 @@ TEST_CASE("test_initialize_grid_tracks" * doctest::test_suite("explicit_grid"))
         expected_tuple_t {GridTrackKind::Gutter, MinTrackSizingFunction::Fixed(px0), MaxTrackSizingFunction::Fixed(px0)}
     };
 
-    REQUIRE(tracks.size() == expected.size()); // TODO: add message "Number of tracks doesn't match"
+    REQUIRE_MESSAGE(tracks.size() == expected.size(), "Number of tracks doesn't match"); 
 
     for(size_t idx = 0; idx < tracks.size(); ++idx)
     {
@@ -222,8 +222,8 @@ TEST_CASE("test_initialize_grid_tracks" * doctest::test_suite("explicit_grid"))
         const auto& min    = std::get<1>(expected[idx]);
         const auto& max    = std::get<2>(expected[idx]);
 
-        REQUIRE(actual.kind == kind); // TODO: add message "Track " << idx << " (0-based index)"
-        REQUIRE(actual.min_track_sizing_function == min); // TODO: add message "Track " << idx << " (0-based index)"
-        REQUIRE(actual.max_track_sizing_function == max); // TODO: add message "Track " << idx << " (0-based index)"
+        REQUIRE_MESSAGE(actual.kind == kind, "Track ", idx, " (0-based index)");
+        REQUIRE_MESSAGE(actual.min_track_sizing_function == min, "Track ", idx, " (0-based index)");
+        REQUIRE_MESSAGE(actual.max_track_sizing_function == max, "Track ", idx, " (0-based index)");
     }
 }
