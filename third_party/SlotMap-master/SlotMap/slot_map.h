@@ -31,6 +31,7 @@
 **********************************************************************/
 
 #include <type_traits>
+#include <cstdlib> // for: malloc(), free()
 #include <cstring> // for: memset(), memcpy()
 #include <cstdint> // for: uint64_t
 #include <memory>  // for: std::addressof()
