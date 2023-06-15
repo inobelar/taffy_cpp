@@ -75,7 +75,6 @@ struct Style
 
     // Size properies
     /// Sets the initial size of the item
-
     Size<Dimension> size;
     /// Controls the minimum size of the item
     Size<Dimension> min_size;
