@@ -103,9 +103,9 @@ target_include_directories(taffy_tests PRIVATE
 # ------------------------------------------------------------------------------
 # taffy_cpp
 
-add_subdirectory(../ taffy_lib_dir)
+add_subdirectory(../ taffy_cpp_lib_dir)
 
-target_link_libraries(taffy_tests PRIVATE taffy)
+target_link_libraries(taffy_tests PRIVATE taffy_cpp)
 
 target_compile_definitions(taffy_tests PRIVATE TAFFY_FEATURE_BLOCK_LAYOUT)
 target_compile_definitions(taffy_tests PRIVATE TAFFY_FEATURE_FLEXBOX)
