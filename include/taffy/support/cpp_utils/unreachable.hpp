@@ -39,6 +39,19 @@ namespace taffy {
     @endcode
 
     Reference: https://stackoverflow.com/a/34112549/
+
+    ----------------------------------------------------------------------------
+
+    TODO: in 'Release' build, assertions may be removed by compiler, so
+    it still may trigger warnings. Maybe we need to use here:
+
+        __builtin_unreachable()
+
+    as described here: https://en.cppreference.com/w/cpp/utility/unreachable
+
+    but this function behave differently - it silience warnings, but in case of
+    reaching 'unreachable' code it not produces stack unwinding or any runtime
+    errors.
 */
 
 #define taffy_unreachable \
