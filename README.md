@@ -1,6 +1,6 @@
 <div align="center">
 
-# taffy_cpp - Taffy C++ port
+# taffy_cpp — Taffy C++ port
 
 :heavy_exclamation_mark: This project currently in 'Work In Progress' state :heavy_exclamation_mark:
 
