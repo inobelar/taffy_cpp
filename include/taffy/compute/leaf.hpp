@@ -325,7 +325,8 @@ inline SizeBaselinesAndMargins compute(
 
         // Measure node
         const auto measured_size = measurable->measure(known_dimensions, _available_space);
-        const auto clamped_size = MaybeMath(node_size.unwrap_or(measured_size)).maybe_clamp(node_min_size, node_max_size);
+        const auto clamped_size =
+            MaybeMath(node_size.unwrap_or(measured_size + content_box_inset.sum_axes())).maybe_clamp(node_min_size, node_max_size);
         const auto size_1 = Size<float> {
             clamped_size.width,
             f32_max(clamped_size.height, aspect_ratio.map<float>([&](float ratio) { return clamped_size.width / ratio; }).unwrap_or(0.0f))
