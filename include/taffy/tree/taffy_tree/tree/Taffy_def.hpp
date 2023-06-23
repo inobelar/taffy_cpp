@@ -275,6 +275,12 @@ struct Taffy
         return Taffy{};
     }
 
+    /* NOTE:
+        Virtual destructor needed to suppress the next compiler warning:
+            class has virtual functions but non-virtual destructor
+    */
+    virtual ~Taffy() = default;
+
     /// Creates a new [`Taffy`] that can store `capacity` nodes before reallocation
     /* RUST
         #[must_use]
