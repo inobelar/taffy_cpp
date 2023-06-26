@@ -23,7 +23,7 @@ struct Layout
     uint32_t order;
     /// The width and height of the node
     Size<float> size;
-    /// The bottom-left corner of the node
+    /// The top-left corner of the node
     Point<float> location;
 
     // -------------------------------------------------------------------------

@@ -360,3 +360,43 @@ TEST_CASE("compute_layout_should_produce_valid_result" * doctest::test_suite("tr
     );
     REQUIRE(layout_result.is_ok());
 }
+
+TEST_CASE("make_sure_layout_location_is_top_left" * doctest::test_suite("tree"))
+{
+    auto taffy = Taffy::New();
+
+    const auto node = taffy
+        .new_leaf(StyleBuilder([](Style& s) {
+            s.size = Size<Dimension> { Dimension::Percent(1.0f), Dimension::Percent(1.0f) };
+        }))
+        .unwrap();
+
+    const auto root = taffy
+        .new_with_children(
+            StyleBuilder([](Style& s) {
+                s.size = Size<Dimension> { Dimension::Length(100.0f), Dimension::Length(100.0f) };
+                s.padding = Rect<LengthPercentage> {
+                    /*left:*/   length<LengthPercentage>(10.0f),
+                    /*right:*/  length<LengthPercentage>(20.0f),
+                    /*top:*/    length<LengthPercentage>(30.0f),
+                    /*bottom:*/ length<LengthPercentage>(40.0f)
+                };
+            }),
+            mkVec(node)
+        )
+        .unwrap();
+
+    taffy.compute_layout(root, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
+
+    // If Layout::location represents top-left coord, 'node' location
+    // must be (due applied 'root' padding): {x: 10, y: 30}.
+    //
+    // It's important, since result will be different for each other
+    // coordinate space:
+    // - bottom-left:  {x: 10, y: 40}
+    // - top-right:    {x: 20, y: 30}
+    // - bottom-right: {x: 20, y: 40}
+    const auto layout = taffy.layout(node).unwrap().get();
+    REQUIRE(layout.location.x == 10.0f);
+    REQUIRE(layout.location.y == 30.0f);
+}
