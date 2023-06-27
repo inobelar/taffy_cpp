@@ -1,6 +1,7 @@
 #pragma once
 
-#include <taffy/compute/grid/types/cell_occupancy/Grid.hpp>
+#include <taffy/support/rust_utils/crates/grid/Grid.hpp>
+
 #include <taffy/compute/grid/types/cell_occupancy/CellOccupancyState.hpp>
 #include <taffy/compute/grid/types/grid_track_counts/TrackCounts.hpp>
 #include <taffy/compute/grid/types/coordinates/OriginZeroLine.hpp>

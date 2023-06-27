@@ -14,7 +14,7 @@ namespace taffy {
     
         https://github.com/becheran/grid/blob/master/src/lib.rs
 
-    with only basic/used features
+    with only basic/used features, needed for `CellOccupancyMatrix`
 */
 
 /// Stores elements of a certain type in a 2D grid structure.
