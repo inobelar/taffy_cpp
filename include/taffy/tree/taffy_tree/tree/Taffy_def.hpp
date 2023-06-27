@@ -537,7 +537,7 @@ struct Taffy
         NodeId new_child
     )
     {
-        const auto parent_key = static_cast<size_t>(parent);
+        const auto parent_key = node_id_into_key(parent);
 
         const auto child_count = this->children[parent_key].size();
         if( child_index >= child_count ) {
