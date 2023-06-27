@@ -36,7 +36,7 @@ TEST_CASE("hidden_layout_should_hide_recursively" * doctest::test_suite("flexbox
 
     // Whatever size and display-mode the nodes had previously,
     // all layouts should resolve to ZERO due to the root's DISPLAY::NONE
-    taffy.nodes.for_each([&](uint64_t node, const NodeData& /*node_data*/)
+    taffy.nodes.for_each([&](const DefaultKey& node, const NodeData& /*node_data*/)
     {
         // .filter(|(node, _)| *node != root.into())
         if( ! [&] {

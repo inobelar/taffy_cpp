@@ -33,5 +33,5 @@ target_include_directories(taffy_cpp INTERFACE
 )
 
 target_include_directories(taffy_cpp INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/SlotMap-master/SlotMap/
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/slot_map/include/
 )

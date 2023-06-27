@@ -23,6 +23,7 @@ add_executable(basic
 
 target_link_libraries(basic PRIVATE taffy_cpp)
 
+target_compile_definitions(basic PRIVATE TAFFY_FEATURE_TAFFY_TREE)
 target_compile_definitions(basic PRIVATE TAFFY_FEATURE_FLEXBOX)
 
 # ------------------------------------------------------------------------------
@@ -33,6 +34,7 @@ add_executable(flexbox_gap
 
 target_link_libraries(flexbox_gap PRIVATE taffy_cpp)
 
+target_compile_definitions(flexbox_gap PRIVATE TAFFY_FEATURE_TAFFY_TREE)
 target_compile_definitions(flexbox_gap PRIVATE TAFFY_FEATURE_FLEXBOX)
 
 # ------------------------------------------------------------------------------
@@ -43,6 +45,7 @@ add_executable(grid_holy_grail
 
 target_link_libraries(grid_holy_grail PRIVATE taffy_cpp)
 
+target_compile_definitions(grid_holy_grail PRIVATE TAFFY_FEATURE_TAFFY_TREE)
 target_compile_definitions(grid_holy_grail PRIVATE TAFFY_FEATURE_GRID)
 
 # ------------------------------------------------------------------------------
@@ -53,6 +56,7 @@ add_executable(nested
 
 target_link_libraries(nested PRIVATE taffy_cpp)
 
+target_compile_definitions(nested PRIVATE TAFFY_FEATURE_TAFFY_TREE)
 target_compile_definitions(nested PRIVATE TAFFY_FEATURE_FLEXBOX)
 
 # ------------------------------------------------------------------------------

@@ -80,6 +80,8 @@ sources tree for:
 | `TAFFY_FEATURE_FLEXBOX`      | Enable `Flexbox` layout algorithm support (and related `Style` properties)
 | `TAFFY_FEATURE_GRID`         | Enable `Grid`    layout algorithm support (and related `Style` properties)
 |                              |
+| `TAFFY_FEATURE_TAFFY_TREE`   | Enable `Taffy` struct support
+|                              |
 | `TAFFY_FEATURE_DEBUG`        | Enable layout algorithm execution-steps debug printing via `DebugLogger`
 | `TAFFY_FEATURE_PROFILE`      | Enable some additional debug printing during layout algorithm execution
 | `TAFFY_CONFIG_TEST`          | Enable extra printing in 'tests'
