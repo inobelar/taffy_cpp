@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_EXTENSIONS off)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/generated/generated_tests_sources.cmake)
+
 set(SOURCES
 
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
@@ -38,7 +40,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/border_and_paddings.cpp
 
     # Generated tests
-    ${CMAKE_CURRENT_SOURCE_DIR}/fixtures.cpp
+    ${TAFFY_TESTS_GENERATED_SOURCES}
 )
     
 add_executable(taffy_tests ${SOURCES})
@@ -114,8 +116,10 @@ target_compile_definitions(taffy_tests PRIVATE TAFFY_FEATURE_GRID)
 target_compile_definitions(taffy_tests PRIVATE TAFFY_CONFIG_TEST)
 
 # ------------------------------------------------------------------------------
-# Generated tests
+
+# Add current directory into 'includes search path', specially for 'generated'
+# tests, which include '<generated_tests_header.hpp>'
 
 target_include_directories(taffy_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/generated/
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )

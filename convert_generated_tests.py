@@ -13,6 +13,9 @@ import shutil
 
 import re
 
+from dataclasses import dataclass
+
+
 parser = argparse.ArgumentParser(description='Taffy generated tests converter (rust -> c++)')
 parser.add_argument('-i', '--input_dir',  type=pathlib.Path)
 parser.add_argument('-o', '--output_dir', type=pathlib.Path)
@@ -1010,6 +1013,11 @@ ensure_directory_exists(output_dir)
 # Make sure, that output directory is empty (erase previously-generated files)
 clear_directory(output_dir)
 
+# ------------------------------------------------------------------------------
+# Gather all tests into 'test_files' (with convertion from Rust into C++)
+
+test_files : dict[str, str] = {}
+
 # via: https://stackoverflow.com/a/3207973/
 for file_name in os.listdir(input_dir):
 
@@ -1025,25 +1033,36 @@ for file_name in os.listdir(input_dir):
 
     file_content = convert_test_content(file_content)
 
+
     file_content = \
-        '#pragma once\n' + \
+        '/*\n' + \
+        '    ATTENTION: GENERATED FROM: taffy/tests/generated/' + file_name + ' !\n' + \
         '\n' + \
-        '// ATTENTION: GENERATED FROM: taffy/tests/generated/' + file_name + ' ! DO NOT EDIT BY HAND !\n' + \
+        '    DO NOT EDIT BY HAND !\n' +\
+        '*/\n' + \
+        '\n' + \
+        '#include <generated_tests_header.hpp>\n' + \
         '\n' + \
         file_content
 
-    print("Converted {}".format(file_name))
-    #print(file_content)
-
     # Filename without extension
     file_name_without_ext = os.path.splitext(file_name)[0]
-    header_file_path = os.path.join(output_dir, file_name_without_ext + '.hpp')
-    write_file(header_file_path, file_content)
+
+    if file_name_without_ext not in test_files.keys():
+        test_files[file_name_without_ext] = file_content
+    else: # 'file_name_without_ext' already inserted into 'test_files'
+        print('Error: File name: {} already inserted into test_files'.format(file_name_without_ext))
+        exit(1)
+
+    print("Converted: {}".format(file_name))
+    #print(file_content)
 
 # ------------------------------------------------------------------------------
-# Gather all tests from 'mod.rs'
+# Gather tests list from 'mod.rs' into 'sources' (with additional marking, if
+# test allowed only if 'grid' feature enabled)
 
-includes = []
+sources: list[ tuple[str, str] ] = []
+
 lines = read_file_lines( os.path.join(input_dir, 'mod.rs') )
 
 for idx, line in enumerate(lines):
@@ -1051,30 +1070,55 @@ for idx, line in enumerate(lines):
     matched = re.search(r'mod (\S+);', line)
 
     if matched:
-        name = matched.group(1)
+        file_name = matched.group(1)
 
         # Only grid, if previous line have special macro
         is_only_grid = r'#[cfg(feature = "grid")]' in lines[idx-1]
 
-        include = {'is_only_grid': is_only_grid, 'name': name}
-        # print(include)
 
-        includes.append(include)
+        file_content = test_files.get(file_name)
+        if file_content is None:
+            print('Error: {} not present in test_files'.format(file_name))
+            exit(1)
+
+        if is_only_grid:
+            file_content = \
+                '#if defined(TAFFY_FEATURE_GRID)\n' + \
+                '\n' + \
+                file_content + \
+                '\n' + \
+                '#endif // TAFFY_FEATURE_GRID\n'
+
+        sources.append( (file_name, file_content) )
 
 # ------------------------------------------------------------------------------
-# Dump gathered tests into 'all_generated_tests.hpp'
+# Dump gathered tests into *.cpp files
 
-with open(os.path.join(output_dir, 'all_generated_tests.hpp'), 'w') as f:
+for file_name_without_ext, file_content in sources:
 
-    f.write('#pragma once\n')
+    source_file_path = os.path.join(output_dir, file_name_without_ext + '.cpp')
+
+    write_file(source_file_path, file_content)
+
+# ------------------------------------------------------------------------------
+# Dump gathered tests list into 'generated_tests_sources.cmake'
+
+with open(os.path.join(output_dir, 'generated_tests_sources.cmake'), 'w') as f:
+
+    attention_comment = \
+        '#\n' + \
+        '#    ATTENTION: GENERATED FROM: taffy/tests/generated/mod.rs !\n' + \
+        '#\n' + \
+        '#    DO NOT EDIT BY HAND!\n' + \
+        '#\n'
+
+    f.write(attention_comment)
     f.write('\n')
-    f.write('// ATTENTION: GENERATED FROM: taffy/tests/generated/mod.rs ! DO NOT EDIT BY HAND!\n')
-    f.write('\n')
+    f.write('SET(TAFFY_TESTS_GENERATED_SOURCES\n')
 
-    for include in includes:
-        if include['is_only_grid']:
-            f.write('#if defined(TAFFY_FEATURE_GRID)\n')
-            f.write('  #include "' + include['name'] + '.hpp"\n')
-            f.write('#endif // TAFFY_FEATURE_GRID\n')
-        else:
-            f.write('#include "' + include['name'] + '.hpp"\n')
+    for file_name_without_ext, content in sources:
+
+        # Notice: here is '{{' '}}' to escape curly brackets
+        f.write( '    ${{CMAKE_CURRENT_LIST_DIR}}/{}.cpp\n'.format(file_name_without_ext) )
+
+    f.write(')\n')
