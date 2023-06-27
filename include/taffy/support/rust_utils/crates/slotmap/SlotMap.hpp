@@ -1,31 +1,34 @@
 #pragma once
 
-#include <cstddef>       // for: size_t
-#include <cstdint>       // for: uint64_t
+#include <taffy/support/rust_utils/crates/slotmap/DefaultKey.hpp>
 
-#include <unordered_map> // for: std::unordered_map<K, V>
+#include <stdext/slot_map.hpp>
 
-#include <slot_map.h>
+#include <cstddef> // for: size_t
+#include <cassert> // for: assert()
 
-/* NOTE
-
-    This is PARTIAL implementation of `slotmap::SlotMap` and `slotmap::SparseSecondaryMap`
-    from external crate (non-taffy module), with only basic/used features,
-    needed for `taffy::Taffy`.
-
-    References:
-        - https://docs.rs/slotmap/latest/slotmap/
-        - https://github.com/orlp/slotmap
-*/
+#include <taffy/support/cpp_utils/uint_pack.hpp>
 
 namespace taffy {
 
 template <typename T>
-struct SlotMap
-    : TSlotMap<T>
+class SlotMap
+    : public stdext::slot_map<T, DefaultKey>
 {
-    using base_t = TSlotMap<T>;
+public:
+
+    using base_t = stdext::slot_map<T, DefaultKey>;
     using base_t::base_t;
+
+private:
+
+    using base_t::reserve;
+    using base_t::insert;
+    using base_t::erase;
+    using base_t::at;
+    using base_t::capacity;
+
+public:
 
     // -------------------------------------------------------------------------
 
@@ -36,105 +39,84 @@ struct SlotMap
         return slot_map;
     }
 
+    inline size_t capacity() const
+    {
+        return base_t::capacity();
+    }
+
     // -------------------------------------------------------------------------
 
-    inline uint64_t insert(const T& value)
+    inline DefaultKey insert(const T& value)
     {
-        const auto key = base_t::push_back(value);
+        const auto key = base_t::insert(value);
         return key;
     }
 
-    inline bool remove(uint64_t key)
+    inline DefaultKey insert(T&& value)
     {
-        return base_t::erase(key);
+        const auto key = base_t::insert(value);
+        return key;
+    }
+
+    inline bool remove(const DefaultKey& key)
+    {
+        return base_t::erase(key) != 0;
     }
 
     // -------------------------------------------------------------------------
 
-    inline T* get_mut(uint64_t key)
+    inline T* get_mut(const DefaultKey& key)
     {
-        return base_t::at(key);
+        auto it = base_t::find(key);
+        if(it == base_t::end())
+            return nullptr;
+        else
+            return &(*it);
     }
 
-    inline const T* get(uint64_t key) const
+    inline const T* get(const DefaultKey& key) const
     {
-        return base_t::at(key);
-    }
-
-    // -------------------------------------------------------------------------
-
-    T& operator [] (uint64_t key) // FIXME: experimental
-    {
-        T* result = base_t::at(key);
-        assert(result != nullptr);
-        return *result;
-    }
-
-    const T& operator [] (uint64_t key) const  // FIXME: experimental
-    {
-        const T* result = base_t::at(key);
-        assert(result != nullptr);
-        return *result;
-    }
-};
-
-template <typename T>
-class SparseSecondaryMap
-    : public std::unordered_map<uint64_t, T>
-{
-public:
-
-    using base_t = std::unordered_map<uint64_t, T>;
-    using base_t::base_t;
-
-private:
-
-    // Hide `std::unordered_map<T>::insert()`, to not accidentally use it
-    // instead of our special `SparseSecondaryMap::insert()`
-    using base_t::insert;
-
-public:
-
-    static SparseSecondaryMap with_capacity(size_t capacity)
-    {
-        SparseSecondaryMap sparse_secondary_map;
-        sparse_secondary_map.reserve(capacity);
-        return sparse_secondary_map;
-    }
-
-    // -------------------------------------------------------------------------
-
-    inline void insert(uint64_t key, const T& value)
-    {
-        /*
-            NOTE: this method must behave like 'insert or replace', so:
-
-                std::unordered_map<T>::insert(std::make_pair(key, value));
-
-            is not enough here.
-
-            --------------------------------------------------------------------
-
-            Also not acceptable version:
-
-                std::unordered_map::operator [] (key) = value;
-
-            since it's in such case T must have default c-tor, but 'MeasureFunc'
-            dont have it.
-        */
-
-        // Via: https://stackoverflow.com/a/19197852/
         const auto it = base_t::find(key);
-        if( it != base_t::end() ) { // already inserted --> replace it
-            it-> second = value;
-        } else {
-            base_t::insert( std::make_pair(key, value) );
-        }
+        if(it == base_t::end())
+            return nullptr;
+        else
+            return &(*it);
     }
 
-    inline void remove(uint64_t key)
+    // -------------------------------------------------------------------------
+
+    T& operator [] (const DefaultKey& key)
     {
-        base_t::erase(key);
+        auto it = base_t::find(key);
+        assert(it != base_t::end());
+        return *it;
+    }
+
+    const T& operator [] (const DefaultKey& key) const
+    {
+        const auto it = base_t::find(key);
+        assert(it != base_t::end());
+        return *it;
+    }
+
+    // -------------------------------------------------------------------------
+    // Needed for tests
+
+    template <typename F>
+    void for_each(F&& callback) const
+    {
+        const auto& keys   = base_t::s();
+        const auto& values = base_t::c();
+
+        assert(values.size() <= keys.size());
+        const size_t values_size = values.size();
+
+        for(size_t i = 0; i < values_size; ++i)
+        {
+            const auto& key   = keys[i];
+            const auto& value = values[i];
+            callback(key, value);
+        }
     }
 };
 

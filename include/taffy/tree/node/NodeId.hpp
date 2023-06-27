@@ -4,8 +4,9 @@
 #include <cstddef> // for: size_t
 
 #if defined(TAFFY_FEATURE_TAFFY_TREE)
-    // TODO: #include <slotmap>
-#endif
+    #include <taffy/support/rust_utils/crates/slotmap/DefaultKey.hpp>
+    #include <taffy/support/cpp_utils/uint_pack.hpp>
+#endif // TAFFY_FEATURE_TAFFY_TREE
 
 #include <taffy/support/rust_utils/Debug.hpp>
 
@@ -144,27 +145,44 @@ public:
 
     #if defined(TAFFY_FEATURE_TAFFY_TREE)
 
-    /* TODO
-
-        #[cfg(feature = "taffy_tree")]
-        impl From<DefaultKey> for NodeId {
-            #[inline]
-            fn from(key: DefaultKey) -> Self {
-                Self(key.data().as_ffi())
+        /* RUST
+            impl From<DefaultKey> for NodeId {
+                #[inline]
+                fn from(key: DefaultKey) -> Self {
+                    Self(key.data().as_ffi())
+                }
             }
+        */
+        template <typename Dummy = void,
+                typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
+        static constexpr NodeId from(const DefaultKey& raw)
+        {
+            return NodeId( uint_pack::pack_u32_pair_into_u64(raw) );
+        }
+        template <typename Dummy = void,
+                  typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
+        constexpr NodeId(const DefaultKey& raw)
+            : NodeId { from(raw) }
+        {}
+
+        // ---------------------------------------------------------------------
+
+        /* RUST
+            impl From<NodeId> for DefaultKey {
+                #[inline]
+                fn from(key: NodeId) -> Self {
+                    KeyData::from_ffi(key.0).into()
+                }
+            }
+        */
+        template <typename Dummy = void,
+                typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
+        explicit constexpr operator DefaultKey () const
+        {
+            return uint_pack::unpack_u64_into_u32_pair(_v0);
         }
 
-        #[cfg(feature = "taffy_tree")]
-        impl From<NodeId> for DefaultKey {
-            #[inline]
-            fn from(key: NodeId) -> Self {
-                KeyData::from_ffi(key.0).into()
-            }
-        }
-
-    */
-
-    #endif
+    #endif // TAFFY_FEATURE_TAFFY_TREE
 };
 
 // -----------------------------------------------------------------------------

@@ -2065,7 +2065,7 @@ inline void align_flex_lines_per_align_content(
     };
 
     if( constants.is_wrap_reverse) {
-        size_t index;
+        size_t index = 0;
         for(auto it = flex_lines.rbegin(); it != flex_lines.rend(); ++it) {
             align_line(index, *it);
             index += 1;

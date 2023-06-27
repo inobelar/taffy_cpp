@@ -3,6 +3,7 @@
 // ATTENTION: This file must never be included directly! Include <Taffy.hpp> instead!
 
 #include <taffy/support/rust_utils/crates/slotmap/SlotMap.hpp>
+#include <taffy/support/rust_utils/crates/slotmap/SparseSecondaryMap.hpp>
 
 #include <taffy/support/rust_utils/Option.hpp>
 #include <taffy/support/rust_utils/Slice.hpp>
@@ -29,9 +30,9 @@ namespace taffy {
 
 // Commonly used function inside of 'Taffy' class, same as:
 // `node.into()` in rust.
-constexpr uint64_t node_id_into_key(taffy::NodeId node)
+constexpr DefaultKey node_id_into_key(taffy::NodeId node)
 {
-    return static_cast<uint64_t>(node);
+    return static_cast<DefaultKey>(node);
 }
 
 
@@ -113,6 +114,8 @@ struct Taffy
     /// Layout mode configuration
     TaffyConfig config;
 
+    // -------------------------------------------------------------------------
+
     Taffy(
         const SlotMap<NodeData>& nodes_,
         const SparseSecondaryMap<MeasureFunc>& measure_funcs_,
@@ -127,6 +130,22 @@ struct Taffy
         , children(children_)
         , parents(parents_)
         , config(config_)
+    {}
+
+    Taffy(
+        SlotMap<NodeData>&& nodes_,
+        SparseSecondaryMap<MeasureFunc>&& measure_funcs_,
+        SlotMap<ChildrenVec<NodeId>>&& children_,
+        SlotMap<Option<NodeId>>&& parents_,
+        TaffyConfig&& config_
+    )
+        : LayoutTree()
+
+        , nodes(std::move(nodes_))
+        , measure_funcs(std::move(measure_funcs_))
+        , children(std::move(children_))
+        , parents(std::move(parents_))
+        , config(std::move(config_))
     {}
 
     // -------------------------------------------------------------------------
@@ -513,12 +532,12 @@ struct Taffy
             void (*) (
                 SlotMap<NodeData>& nodes,
                 const SlotMap<Option<NodeId>>& parents,
-                uint64_t node_key
+                const DefaultKey& node_key
             );
         static const mark_dirty_recursive_t mark_dirty_recursive = [](
             SlotMap<NodeData>& nodes,
             const SlotMap<Option<NodeId>>& parents,
-            uint64_t node_key
+            const DefaultKey& node_key
         )
         {
             nodes[node_key].mark_dirty();

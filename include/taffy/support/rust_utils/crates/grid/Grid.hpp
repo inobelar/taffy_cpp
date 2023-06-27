@@ -8,17 +8,6 @@
 
 namespace taffy {
 
-/* NOTE
-
-    This is PARTIAL implementation of `grid::Grid` from external crate
-    (non-taffy module), with only basic/used features, needed for
-    `taffy::CellOccupancyMatrix`.
-
-    References:
-        - https://docs.rs/grid/latest/grid/
-        - https://github.com/becheran/grid/blob/master/src/lib.rs
-*/
-
 /// Stores elements of a certain type in a 2D grid structure.
 ///
 /// Uses a rust `Vec<T>` type to reference the grid data on the heap.
