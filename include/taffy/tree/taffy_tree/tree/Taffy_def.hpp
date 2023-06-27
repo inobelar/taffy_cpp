@@ -26,6 +26,8 @@
 
 #include <algorithm> // for: std::remove_if()
 
+namespace taffy {
+
 template <typename T>
 struct SlotMap
     : TSlotMap<T>
@@ -96,7 +98,7 @@ public:
 private:
 
     // Hide `std::unordered_map<T>::insert()`, to not accidentally use it
-    // instead of our special `SparceSecondaryMap::insert()`
+    // instead of our special `SparseSecondaryMap::insert()`
     using base_t::insert;
 
 public:
@@ -169,6 +171,7 @@ inline T replace(T& dest, const T& src)
 } // namespace mem
 } // namespace core
 
+
 // TODO: maybe it must be moved into 'support' section ?
 namespace vec_utils {
 
@@ -201,8 +204,6 @@ inline void retain(taffy::Vec<T>& vec, F&& f)
 
 } // namespace vec_utils
 
-
-namespace taffy {
 
 /// A tree of UI nodes suitable for UI layout
 /* RUST
