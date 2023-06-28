@@ -13,7 +13,8 @@
 
 - [slot_map](https://github.com/Masstronaut/slot_array/blob/master/P0661r2.md)
     - NOTE: we using slightly patched 'reference implementation implemented by
-      Arthur O'Dwyer for the SG14' (from [here](https://github.com/WG21-SG14/SG14/blob/master/SG14/slot_map.h))
+      [Arthur O'Dwyer](https://github.com/Quuxplusone) for the SG14' (from
+      [here](https://github.com/WG21-SG14/SG14/blob/master/SG14/slot_map.h))
 
       Patches contains the next changes, needed to adapt it for C++11:
       - Explicit types, instead of `auto`:
