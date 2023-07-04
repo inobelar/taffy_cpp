@@ -10,7 +10,7 @@
 
 namespace taffy {
 
-/// Container 
+/// Container that holds an item in each absolute axis without specifying
 /// what kind of item it is.
 /* RUST
     #[derive(Clone, Copy, Debug, PartialEq, Eq)]
