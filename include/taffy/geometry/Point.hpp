@@ -28,7 +28,7 @@ namespace taffy {
 
 /// A 2-dimensional coordinate.
 ///
-/// When used in association with a [`Rect`], represents the bottom-left corner.
+/// When used in association with a [`Rect`], represents the top-left corner.
 /* RUST
     #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
     #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
