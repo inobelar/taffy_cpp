@@ -56,7 +56,7 @@ struct Slice
         @endcode
     */
     template <typename RangeT>
-    constexpr Slice<T> sub_slice_from_range(const Range<RangeT>& range)
+    constexpr Slice<T> sub_slice_from_range(const Range<RangeT>& range) const
     {
         return Slice<T>{ base_t::begin() + range.start, base_t::begin() + range.end };
     }
