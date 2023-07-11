@@ -100,7 +100,7 @@ struct Point
     */
     template <typename U = T, 
               typename = typename std::enable_if< std::is_same<U, Option<float>>::value == true>::type>
-    static constexpr Point<Option<float>> NONE() { return { None, None }; }
+    static inline Point<Option<float>> NONE() { return { None, None }; } // NOTE: unfortunately in C++11 'optional' is not constexpr
 
     // -------------------------------------------------------------------------
 

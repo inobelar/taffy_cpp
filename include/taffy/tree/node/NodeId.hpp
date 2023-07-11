@@ -155,13 +155,13 @@ public:
         */
         template <typename Dummy = void,
                 typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
-        static constexpr NodeId from(const DefaultKey& raw)
+        static inline NodeId from(const DefaultKey& raw) // NOTE: non-costexpr due to non-constexpr `DefaultKey` (that is `std::pair`) and `pack_u32_pair_into_u64()`
         {
             return NodeId( uint_pack::pack_u32_pair_into_u64(raw) );
         }
         template <typename Dummy = void,
                   typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
-        constexpr NodeId(const DefaultKey& raw)
+        inline NodeId(const DefaultKey& raw) // NOTE: non-costexpr due to non-constexpr `from` method above
             : NodeId { from(raw) }
         {}
 
@@ -177,7 +177,7 @@ public:
         */
         template <typename Dummy = void,
                 typename = typename std::enable_if< std::is_same<DefaultKey, uint64_t>::value == false, Dummy>::type>
-        explicit constexpr operator DefaultKey () const
+        explicit inline operator DefaultKey () const /// NOTE: non-costexpr due to non-constexpr `DefaultKey` (that is `std::pair`) and `unpack_u64_into_u32_pair()`
         {
             return uint_pack::unpack_u64_into_u32_pair(_v0);
         }

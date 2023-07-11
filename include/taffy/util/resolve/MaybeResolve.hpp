@@ -273,7 +273,7 @@ public:
               typename = typename std::enable_if< std::is_same<Out, Option<float>>::value == true >::type>
     static inline Option<float> MaybeResolve_impl_maybe_resolve(const T& self, float context)
     {
-        return MaybeResolve(self).maybe_resolve( Some(context) );
+        return MaybeResolve(self).maybe_resolve( Option<float>{context} ); // TODO: use `Some(context)` instead of `Option<float>{context}`
     }
 };
 

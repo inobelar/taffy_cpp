@@ -379,7 +379,7 @@ struct Size
     */
     template <typename U = T,
               typename = typename std::enable_if< std::is_same<U, Option<float> >::value == true>::type>
-    static constexpr Size<Option<float>> NONE() { return { None, None }; }
+    static inline Size<Option<float>> NONE() { return { None, None }; } // NOTE: unfortunately in C++11 'optional' is not constexpr
 
     /// A [`Size<Option<f32>>`] with `Some(width)` and `Some(height)` as parameters
     /* RUST
@@ -388,13 +388,13 @@ struct Size
     */
     template <typename U = T,
               typename = typename std::enable_if< std::is_same<U, Option<float> >::value == true>::type>
-    static constexpr Size<Option<float>> New(float width, float height)
+    static inline Size<Option<float>> New(float width, float height) // NOTE: unfortunately in C++11 'optional' is not constexpr
     {
         return Size<Option<float>>{ Option<float>{width}, Option<float>{height} };
     }
     template <typename U = T,
              typename = typename std::enable_if< std::is_same<U, Option<float> >::value == true>::type>
-    constexpr Size(float width, float height)
+    inline Size(float width, float height) // NOTE: since 'New' above non-constexpr, that c-tor non-constexpr too
         : Size { New(width, height) }
     {}
 
@@ -408,7 +408,7 @@ struct Size
     */
     template <typename U = T,
               typename = typename std::enable_if< std::is_same<U, Option<float> >::value == true>::type>
-    constexpr Size<Option<float>> maybe_apply_aspect_ratio(Option<float> aspect_ratio) const
+    inline Size<Option<float>> maybe_apply_aspect_ratio(Option<float> aspect_ratio) const // NOTE: unfortunately in C++11 'optional' is not constexpr
     {
         return 
             ( aspect_ratio.is_some() == true ) ?
@@ -695,7 +695,7 @@ struct Size
     */
     template <typename U = T,
               typename = typename std::enable_if< std::is_same<U, AvailableSpace>::value == true >::type>
-    constexpr Size<Option<float>> into_options() const
+    inline Size<Option<float>> into_options() const // NOTE: unfortunately in C++11 'optional' is not constexpr
     {
         return Size<Option<float>> { this->width.into_option(), this->height.into_option() };
     }

@@ -30,7 +30,7 @@ namespace taffy {
 
 // Commonly used function inside of 'Taffy' class, same as:
 // `node.into()` in rust.
-constexpr DefaultKey node_id_into_key(taffy::NodeId node)
+inline DefaultKey node_id_into_key(taffy::NodeId node)
 {
     return static_cast<DefaultKey>(node);
 }

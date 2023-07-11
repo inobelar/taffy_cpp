@@ -12,7 +12,7 @@ namespace taffy {
 
 struct DefaultKeyHasher
 {
-    constexpr size_t operator () (const DefaultKey& key) const
+    inline size_t operator () (const DefaultKey& key) const
     {
         return uint_pack::pack_u32_pair_into_u64(key);
     }
