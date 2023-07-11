@@ -141,7 +141,7 @@ struct Debug_specialization<Overflow>
         case Overflow::Type::Scroll  : return "Scroll";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

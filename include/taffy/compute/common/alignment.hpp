@@ -72,11 +72,11 @@ inline float compute_alignment_offset(
             case AlignContent::SpaceEvenly: { return free_space / static_cast<float>(num_items + 1); } break;
             }
 
-            taffy_unreachable;
+            taffy_unreachable();
         }();
     }
 
-    taffy_unreachable;
+    taffy_unreachable();
 }
 
 } // namespace taffy

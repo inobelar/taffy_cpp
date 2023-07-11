@@ -148,7 +148,7 @@ struct Debug_specialization<GridTrackRepetition>
         case GridTrackRepetition::Type::Count: return "Count(" + Debug(value.value()) + ")";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

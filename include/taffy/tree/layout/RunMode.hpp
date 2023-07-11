@@ -36,7 +36,7 @@ struct Debug_specialization<RunMode>
         case RunMode::ComputeSize   : return "ComputeSize";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

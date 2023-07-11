@@ -211,7 +211,7 @@ inline SizeBaselinesAndMargins perform_computations(
     } break;
     }
 
-    taffy_unreachable;
+    taffy_unreachable();
 }
 
 } // namespace internal
@@ -352,7 +352,7 @@ inline SizeBaselinesAndMargins compute_node_layout(
             }
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
     // Cache result

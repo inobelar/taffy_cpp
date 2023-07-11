@@ -34,7 +34,7 @@ struct Debug_specialization<GridTrackKind>
         case GridTrackKind::Gutter: return "Gutter";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

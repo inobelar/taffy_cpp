@@ -320,7 +320,7 @@ struct Debug_specialization<AvailableSpace>
         case AvailableSpace::Type::MaxContent : return "MaxContent";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

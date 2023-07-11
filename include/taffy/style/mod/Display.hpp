@@ -149,7 +149,7 @@ struct Debug_specialization<Display>
         case Display::Type::None : return "None";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

@@ -208,7 +208,7 @@ struct Debug_specialization<Dimension>
         case Dimension::Type::Auto    : return "Auto";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

@@ -104,7 +104,7 @@ struct Debug_specialization<Position>
         case Position::Type::Absolute : return "Absolute";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

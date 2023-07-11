@@ -34,7 +34,7 @@ struct Debug_specialization<SizingMode>
         case SizingMode::InherentSize : return "InherentSize";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

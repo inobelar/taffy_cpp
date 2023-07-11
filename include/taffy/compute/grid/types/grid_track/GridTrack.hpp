@@ -221,7 +221,7 @@ struct GridTrack
         default: { return std::numeric_limits<float>::infinity(); } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Returns true if the track is flexible (has a Flex MaxTrackSizingFunction), else false.

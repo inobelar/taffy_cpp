@@ -93,7 +93,7 @@ inline void align_tracks(
             case AlignContent::SpaceAround: { return 0.0f; } break;
             }
 
-            taffy_unreachable;
+            taffy_unreachable();
         }();
 
     // Count the number of non-collapsed tracks (not counting gutters)
@@ -372,7 +372,7 @@ inline float align_item_within_area(
         } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
     const auto offset_within_area = 

@@ -144,7 +144,7 @@ struct Debug_specialization<GridAutoFlow>
         case GridAutoFlow::Type::ColumnDense : return "ColumnDense";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

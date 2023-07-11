@@ -80,7 +80,7 @@ inline Size<float> measure_standard_text(
             } break;
             }
 
-            taffy_unreachable;
+            taffy_unreachable();
         });
     const auto block_size =
         known_dimensions.get_abs(block_axis).unwrap_or_else([&] {

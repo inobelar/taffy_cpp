@@ -308,7 +308,7 @@ public:
         } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Resolve the maximum size of the track as defined by either:
@@ -333,7 +333,7 @@ public:
         default: { return this->definite_value(parent_size); } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Resolve percentage values against the passed parent_size, returning Some(value)
@@ -360,7 +360,7 @@ public:
         } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Whether the track sizing functions depends on the size of the parent node
@@ -392,7 +392,7 @@ struct Debug_specialization<MaxTrackSizingFunction>
         case MaxTrackSizingFunction::Type::Fraction: return "Fraction(" + Debug(value.fraction()) + ")";    
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

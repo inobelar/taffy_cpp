@@ -154,7 +154,7 @@ struct Debug_specialization<FlexDirection>
         case FlexDirection::Type::ColumnReverse : return "ColumnReverse";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

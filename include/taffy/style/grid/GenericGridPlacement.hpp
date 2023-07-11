@@ -147,7 +147,7 @@ struct Debug_specialization< GenericGridPlacement<LineType> , typename std::enab
         case GenericGridPlacement<LineType>::Type::Span: return "Span(" + Debug(value.span()) + ")";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

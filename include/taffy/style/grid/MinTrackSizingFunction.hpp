@@ -213,7 +213,7 @@ public:
         } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Resolve percentage values against the passed parent_size, returning Some(value)
@@ -238,7 +238,7 @@ public:
         } break;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 
     /// Whether the track sizing functions depends on the size of the parent node
@@ -267,7 +267,7 @@ struct Debug_specialization<MinTrackSizingFunction>
         case MinTrackSizingFunction::Type::Auto: return "Auto";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

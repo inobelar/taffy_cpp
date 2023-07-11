@@ -103,7 +103,7 @@ struct Debug_specialization<FlexWrap>
         case FlexWrap::Type::WrapReverse : return "WrapReverse"; 
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

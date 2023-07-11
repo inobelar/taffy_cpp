@@ -199,7 +199,7 @@ struct Debug_specialization<LengthPercentageAuto>
         case LengthPercentageAuto::Type::Auto    : return "Auto";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

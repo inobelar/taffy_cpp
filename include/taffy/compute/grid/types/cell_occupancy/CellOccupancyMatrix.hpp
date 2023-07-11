@@ -296,7 +296,7 @@ public:
             } break;
             }
 
-            taffy_unreachable;
+            taffy_unreachable();
         }();
 
         return maybe_index.map<OriginZeroLine>([&](size_t idx) { return track_counts.track_to_prev_oz_line(static_cast<uint16_t>(idx)); });
@@ -338,7 +338,7 @@ struct Debug_specialization<CellOccupancyMatrix>
                     case CellOccupancyState::Type::AutoPlaced       : return 'A';
                     }
 
-                    taffy_unreachable;
+                    taffy_unreachable();
                 }();
                 str += letter;
             }

@@ -995,7 +995,7 @@ inline Vec<FlexLine> collect_flex_lines(
         }
     }
 
-    taffy_unreachable;
+    taffy_unreachable();
 }
 
 /// Determine the container's main size (if not already known)
@@ -1214,7 +1214,7 @@ inline void determine_container_main_size(
             return main_size + main_content_box_inset;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     });
 
     const auto _outer_main_size = [&] {
@@ -1988,7 +1988,7 @@ inline float align_flex_items_along_cross_axis(
     } break;
     }
 
-    taffy_unreachable;
+    taffy_unreachable();
 }
 
 /// Determine the flex container’s used cross size.
@@ -2440,7 +2440,7 @@ inline void perform_absolute_layout_on_absolute_children(
                             / 2.0f;
                     }
 
-                    taffy_unreachable;
+                    taffy_unreachable();
 
                 }( constants.justify_content.unwrap_or(JustifyContent::Start), constants.is_wrap_reverse );
             }
@@ -2495,7 +2495,7 @@ inline void perform_absolute_layout_on_absolute_children(
                             / 2.0f;
                     }
 
-                    taffy_unreachable;
+                    taffy_unreachable();
 
                 }( align_self, constants.is_wrap_reverse );
             }

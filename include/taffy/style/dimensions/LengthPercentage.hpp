@@ -127,7 +127,7 @@ struct Debug_specialization<LengthPercentage>
         case LengthPercentage::Type::Percent : return "Percent(" + Debug(value.value()) + ")";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

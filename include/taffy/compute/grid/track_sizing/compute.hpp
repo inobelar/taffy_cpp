@@ -175,7 +175,7 @@ cmp_by_cross_flex_then_span_then_start(
                     case Ordering::Equal   : return cmp(placement_a.start, placement_b.start);
                     }
 
-                    taffy_unreachable;
+                    taffy_unreachable();
                 }();
     };
 }
@@ -218,7 +218,7 @@ inline float compute_alignment_gutter_adjustment(
         case AlignContent::SpaceEvenly: return 1;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
     const auto inner_gutter_weight = [&] {
@@ -234,7 +234,7 @@ inline float compute_alignment_gutter_adjustment(
         case AlignContent::SpaceEvenly: return 1;
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
     if( inner_gutter_weight == 0 ) {
@@ -747,7 +747,7 @@ inline void resolve_intrinsic_track_sizes(
                         return track.base_size;
                     }
 
-                    taffy_unreachable;
+                    taffy_unreachable();
                 }();
 
                 track = axis_tracks[static_cast<size_t>(track_index)];
@@ -1192,7 +1192,7 @@ inline void distribute_item_space_to_base_size(
                 } break;
                 }
 
-                taffy_unreachable;
+                taffy_unreachable();
             }();
 
             // If there are no such tracks (matching filter above), then use all affected tracks.
@@ -1542,7 +1542,7 @@ inline void expand_flexible_tracks(
             }
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
         
 

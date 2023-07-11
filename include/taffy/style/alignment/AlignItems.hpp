@@ -83,7 +83,7 @@ struct Debug_specialization<AlignItems>
         case AlignItems::Stretch   : return "Stretch";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

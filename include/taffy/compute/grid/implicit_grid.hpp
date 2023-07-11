@@ -226,7 +226,7 @@ child_min_line_max_line_span(
             return OriginZeroLine(0);
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
     const auto _max = [&]
@@ -289,7 +289,7 @@ child_min_line_max_line_span(
             return OriginZeroLine(0);
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }();
 
 

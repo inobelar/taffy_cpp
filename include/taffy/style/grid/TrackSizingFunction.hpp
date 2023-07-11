@@ -281,7 +281,7 @@ struct Debug_specialization<TrackSizingFunction>
         case TrackSizingFunction::Type::Repeat: return "Repeat(" + Debug(value.repeat_repetition()) + ", " + Debug(value.repeat_funcs()) + ")";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 

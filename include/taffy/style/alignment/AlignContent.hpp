@@ -76,7 +76,7 @@ struct Debug_specialization<AlignContent>
         case AlignContent::SpaceAround  : return "SpaceAround";
         }
 
-        taffy_unreachable;
+        taffy_unreachable();
     }
 };
 
