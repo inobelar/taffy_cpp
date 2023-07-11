@@ -17,8 +17,8 @@ namespace impl {
         using iterator_category = std::forward_iterator_tag;
         using difference_type   = std::ptrdiff_t;
         using value_type        = Item;
-        using pointer           = Item*;  // or also value_type*
-        using reference         = Item&;  // or also value_type&
+        using pointer           = Item*;  // or also `value_type*`
+        using reference         = Item&;  // or also `value_type&`
 
         constexpr Iterator(pointer ptr) 
             : m_ptr(ptr) 
@@ -47,14 +47,15 @@ namespace impl {
         using iterator_category = std::forward_iterator_tag;
         using difference_type   = std::ptrdiff_t;
         using value_type        = Item;
-        using pointer           = Item*;  // or also value_type*
-        using reference         = Item&;  // or also value_type&
+        using pointer           = Item*;       // or also `value_type*`
+        using reference         = Item&;       // or also `value_type&`
+        using const_reference   = Item const&; // or also `value_type const&`
 
         constexpr ConstIterator(pointer ptr)
             : m_ptr(ptr)
         {}
 
-        const reference operator * () const { return *m_ptr; } // Note: following 'const' is the only difference from 'Iterator'
+        const_reference operator * () const { return *m_ptr; } // Note: 'const_reference' and following 'const' is the only difference from 'Iterator'
         pointer operator -> () { return m_ptr; }
 
         // Prefix increment
