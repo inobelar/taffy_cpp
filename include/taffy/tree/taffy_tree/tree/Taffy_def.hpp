@@ -557,7 +557,7 @@ struct Taffy
     /* RUST
         pub fn dirty(&self, node: NodeId) -> TaffyResult<bool>
     */
-    TaffyResult<bool> dirty(NodeId node)
+    TaffyResult<bool> dirty(NodeId node) const
     {
         return TaffyResult<bool>::Ok(this->nodes[node_id_into_key(node)].cache.is_empty());
     }
