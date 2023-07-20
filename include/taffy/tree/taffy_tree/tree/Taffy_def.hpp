@@ -573,9 +573,9 @@ struct Taffy
 
     /// Updates the stored layout of the provided `node` and its children
     /* RUST
-        pub fn compute_layout(&mut self, node: NodeId, available_space: Size<AvailableSpace>) -> Result<(), TaffyError>
+        pub fn compute_layout(&mut self, node: NodeId, available_space: Size<AvailableSpace>) -> TaffyResult<()>
     */
-    Result<void, TaffyError> compute_layout(NodeId node, const Size<AvailableSpace>& available_space)
+    TaffyResult<void> compute_layout(NodeId node, const Size<AvailableSpace>& available_space)
     {
         return taffy_tree::compute_layout(*this, node, available_space);
     }
