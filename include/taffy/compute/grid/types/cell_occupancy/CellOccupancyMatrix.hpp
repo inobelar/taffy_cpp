@@ -63,7 +63,7 @@ public:
     /// Determines whether the specified area fits within the tracks currently represented by the matrix
     /* RUST
         pub fn is_area_in_range(
-            &mut self,
+            &self,
             primary_axis: AbsoluteAxis,
             primary_range: Range<i16>,
             secondary_range: Range<i16>,
@@ -73,7 +73,7 @@ public:
         AbsoluteAxis primary_axis,
         const Range<int16_t>& primary_range,
         const Range<int16_t>& secondary_range
-    ) // TODO: this function may be CONST
+    ) const
     {
         if( (primary_range.start < 0) || (primary_range.end > static_cast<int16_t>(this->track_counts(primary_axis).len())) ) {
             return false;

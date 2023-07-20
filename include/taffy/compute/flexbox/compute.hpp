@@ -115,7 +115,7 @@ void handle_align_content_stretch(
 );
 
 void determine_used_cross_size(
-    LayoutTree& tree, 
+    const LayoutTree& tree,
     Slice<FlexLine> flex_lines,
     const AlgoConstants& constants
 );
@@ -131,7 +131,7 @@ void resolve_cross_axis_auto_margins(
 ); 
 
 float determine_container_cross_size(
-    Slice<FlexLine> flex_lines,
+    Slice<FlexLine const> flex_lines,
     const Size<Option<float>>& node_size,
     AlgoConstants& constants
 );
@@ -156,7 +156,7 @@ void perform_absolute_layout_on_absolute_children(
 );
 
 float align_flex_items_along_cross_axis(
-    FlexItem& child,
+    const FlexItem& child,
     float free_space,
     float max_baseline,
     const AlgoConstants& constants
@@ -1738,10 +1738,10 @@ inline void handle_align_content_stretch(
 ///     **Note that this step does not affect the main size of the flex item, even if it has an intrinsic aspect ratio**.
 /* RUST
     #[inline]
-    fn determine_used_cross_size(tree: &mut impl LayoutTree, flex_lines: &mut [FlexLine], constants: &AlgoConstants)
+    fn determine_used_cross_size(tree: &impl LayoutTree, flex_lines: &mut [FlexLine], constants: &AlgoConstants)
 */
 inline void determine_used_cross_size(
-    LayoutTree& tree,
+    const LayoutTree& tree,
     Slice<FlexLine> flex_lines,
     const AlgoConstants& constants
 )
@@ -1936,14 +1936,14 @@ inline void resolve_cross_axis_auto_margins(
 /* RUST
     #[inline]
     fn align_flex_items_along_cross_axis(
-        child: &mut FlexItem,
+        child: &FlexItem,
         free_space: f32,
         max_baseline: f32,
         constants: &AlgoConstants,
     ) -> f32
 */
 inline float align_flex_items_along_cross_axis(
-    FlexItem& child,
+    const FlexItem& child,
     float free_space,
     float max_baseline,
     const AlgoConstants& constants
@@ -2004,13 +2004,13 @@ inline float align_flex_items_along_cross_axis(
     #[inline]
     #[must_use]
     fn determine_container_cross_size(
-        flex_lines: &mut [FlexLine],
+        flex_lines: &[FlexLine],
         node_size: Size<Option<f32>>,
         constants: &mut AlgoConstants,
     ) -> f32
 */
 inline float determine_container_cross_size(
-    Slice<FlexLine> flex_lines,
+    Slice<FlexLine const> flex_lines,
     const Size<Option<float>>& node_size,
     AlgoConstants& constants
 )

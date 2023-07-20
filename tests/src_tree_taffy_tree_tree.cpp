@@ -234,6 +234,26 @@ TEST_CASE("remove_child_at_index" * doctest::test_suite("tree"))
     REQUIRE(taffy.child_count(node).unwrap() == 0);
 }
 
+/*
+    NOTE: COMMENTED, until https://github.com/DioxusLabs/taffy/pull/512 not merged
+
+// Related to: https://github.com/DioxusLabs/taffy/issues/510
+TEST_CASE("remove_child_updates_parents" * doctest::test_suite("tree"))
+{
+    auto taffy = Taffy::New();
+
+    const auto parent = taffy.new_leaf(Style::Default()).unwrap();
+    const auto child = taffy.new_leaf(Style::Default()).unwrap();
+
+    taffy.add_child(parent, child).unwrap();
+
+    taffy.remove(parent).unwrap();
+
+    // Once the parent is removed this shouldn't panic.
+    REQUIRE(taffy.set_children(child, {}).is_ok());
+}
+*/
+
 TEST_CASE("replace_child_at_index" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();

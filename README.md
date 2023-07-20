@@ -68,8 +68,8 @@ supported by a big company and used in many projects in various languages).
 Current state of this library sources reflects the state of [Taffy][taffy_url] 
 sources tree for:
 
-- Commit: [0914058db433aaba2d4e4d6b11efc73eb1daf61d](https://github.com/DioxusLabs/taffy/tree/0914058db433aaba2d4e4d6b11efc73eb1daf61d)
-    - In tree: [0914058](https://github.com/DioxusLabs/taffy/commits/main#:~:text=0914058)
+- Commit: [6cf79606d96aa7ab788fcb370b4a680abd45e699](https://github.com/DioxusLabs/taffy/tree/6cf79606d96aa7ab788fcb370b4a680abd45e699)
+    - In tree: [6cf7960](https://github.com/DioxusLabs/taffy/commits/main#:~:text=6cf7960)
         <!-- Reference to '#:~:text=<text>' usage: https://stackoverflow.com/a/62162093/ -->
 
 ## Configuring

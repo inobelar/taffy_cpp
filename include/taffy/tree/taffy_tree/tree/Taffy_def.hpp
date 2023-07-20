@@ -298,6 +298,15 @@ struct Taffy
             }
         }
 
+        {
+            const auto* children_opt = this->children.get(key);
+            if(children_opt != nullptr) {
+                for(const auto& child : *children_opt) {
+                    this->parents[node_id_into_key(child)] = None;
+                }
+            }
+        }
+
         this->children.remove(key);
         this->parents.remove(key);
         this->nodes.remove(key);

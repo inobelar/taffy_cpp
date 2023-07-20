@@ -58,7 +58,7 @@ perform_final_layout_on_in_flow_children(
 
 void perform_absolute_layout_on_absolute_children(
     LayoutTree& tree,
-    Slice<BlockItem> items,
+    Slice<BlockItem const> items,
     const Size<float>& area_size,
     const Point<float>& area_offset
 );
@@ -579,14 +579,14 @@ perform_final_layout_on_in_flow_children(
     #[inline]
     fn perform_absolute_layout_on_absolute_children(
         tree: &mut impl LayoutTree,
-        items: &mut [BlockItem],
+        items: &[BlockItem],
         area_size: Size<f32>,
         area_offset: Point<f32>,
     )
 */
 inline void perform_absolute_layout_on_absolute_children(
     LayoutTree& tree,
-    Slice<BlockItem> items,
+    Slice<BlockItem const> items,
     const Size<float>& area_size,
     const Point<float>& area_offset
 ) {
