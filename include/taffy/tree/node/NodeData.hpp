@@ -17,8 +17,14 @@ struct NodeData
 {
     /// The layout strategy used by this node
     Style style;
-    /// The results of the layout computation
-    Layout layout;
+
+    /// The always unrounded results of the layout computation. We must store this separately from the rounded
+    /// layout to avoid errors from rounding already-rounded values. See <https://github.com/DioxusLabs/taffy/issues/501>.
+    Layout unrounded_layout;
+
+    /// The final results of the layout computation.
+    /// These may be rounded or unrounded depending on what the `use_rounding` config setting is set to.
+    Layout final_layout;
 
     /// Should we try and measure this node?
     bool needs_measure;
@@ -30,12 +36,14 @@ struct NodeData
 
     NodeData(
         const Style& style_,
-        const Layout& layout_,
+        const Layout& unrounded_layout_,
+        const Layout& final_layout_,
         bool needs_measure_,
         const Cache& cache_
     )
         : style(style_)
-        , layout(layout_)
+        , unrounded_layout(unrounded_layout_)
+        , final_layout(final_layout_)
         , needs_measure(needs_measure_)
         , cache(cache_)
     {}
@@ -49,7 +57,13 @@ struct NodeData
     */
     static inline NodeData New(const Style& style)
     {
-        return NodeData { style, Layout::New(), false, Cache::New() };
+        return NodeData { // NOTE: slightly different order, than in rust
+            /*style:*/ style,
+            /*unrounded_layout:*/ Layout::New(),
+            /*final_layout:*/ Layout::New(),
+            /*needs_measure:*/ false,
+            /*cache:*/ Cache::New()
+        };
     }
     NodeData(const Style& style)
         : NodeData { New(style) }

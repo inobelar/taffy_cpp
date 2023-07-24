@@ -114,6 +114,11 @@ struct Taffy
     /// Layout mode configuration
     TaffyConfig config;
 
+    /// Hack to allow the `LayoutTree::layout_mut` function to expose the `NodeData.unrounded_layout` of a node to
+    /// the layout algorithms during layout, while exposing the `NodeData.final_layout` when called by external users.
+    /// This allows us to fix <https://github.com/DioxusLabs/taffy/issues/501> without breaking backwards compatibility
+    bool is_layouting;
+
     // -------------------------------------------------------------------------
 
     Taffy(
@@ -121,7 +126,8 @@ struct Taffy
         const SparseSecondaryMap<MeasureFunc>& measure_funcs_,
         const SlotMap<ChildrenVec<NodeId>>& children_,
         const SlotMap<Option<NodeId>>& parents_,
-        const TaffyConfig& config_
+        const TaffyConfig& config_,
+        bool is_layouting_
     )
         : LayoutTree()
 
@@ -130,6 +136,7 @@ struct Taffy
         , children(children_)
         , parents(parents_)
         , config(config_)
+        , is_layouting(is_layouting_)
     {}
 
     Taffy(
@@ -137,7 +144,8 @@ struct Taffy
         SparseSecondaryMap<MeasureFunc>&& measure_funcs_,
         SlotMap<ChildrenVec<NodeId>>&& children_,
         SlotMap<Option<NodeId>>&& parents_,
-        TaffyConfig&& config_
+        TaffyConfig&& config_,
+        bool&& is_layouting_
     )
         : LayoutTree()
 
@@ -146,6 +154,7 @@ struct Taffy
         , children(std::move(children_))
         , parents(std::move(parents_))
         , config(std::move(config_))
+        , is_layouting(std::move(is_layouting_))
     {}
 
     // -------------------------------------------------------------------------
@@ -197,7 +206,8 @@ struct Taffy
             /*measure_funcs:*/ SparseSecondaryMap<MeasureFunc>::with_capacity(capacity),
             /*children:*/ SlotMap<ChildrenVec<NodeId>>::with_capacity(capacity),
             /*parents:*/ SlotMap<Option<NodeId>>::with_capacity(capacity),
-            /*config:*/ TaffyConfig()
+            /*config:*/ TaffyConfig(),
+            /*is_layouting:*/ false
         };
     }
 
@@ -523,7 +533,7 @@ struct Taffy
     */
     inline TaffyResult<std::reference_wrapper<Layout const>> layout(NodeId node) const
     {
-        return TaffyResult<std::reference_wrapper<Layout const>>::Ok( std::cref( this->nodes[node_id_into_key(node)].layout) );
+        return TaffyResult<std::reference_wrapper<Layout const>>::Ok( std::cref( this->nodes[node_id_into_key(node)].final_layout) );
     }
 
     /// Marks the layout computation of this node and its children as outdated
@@ -628,7 +638,11 @@ struct Taffy
     */
     inline const Layout& impl_layout(NodeId node) const override
     {
-        return this->nodes[node_id_into_key(node)].layout;
+        if(this->is_layouting && this->config.use_rounding) {
+            return this->nodes[node_id_into_key(node)].unrounded_layout;
+        } else {
+            return this->nodes[node_id_into_key(node)].final_layout;
+        }
     }
 
     /* RUST
@@ -637,7 +651,11 @@ struct Taffy
     */
     inline Layout& impl_layout_mut(NodeId node) override
     {
-        return this->nodes[node_id_into_key(node)].layout;
+        if(this->is_layouting && this->config.use_rounding) {
+            return this->nodes[node_id_into_key(node)].unrounded_layout;
+        } else {
+            return this->nodes[node_id_into_key(node)].final_layout;
+        }
     }
 
     /* RUST

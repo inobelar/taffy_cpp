@@ -46,7 +46,7 @@ SizeBaselinesAndMargins compute_node_layout(
 
 void perform_taffy_tree_hidden_layout(Taffy& tree, NodeId node);
 
-void round_layout(LayoutTree& tree, NodeId node, float abs_x, float abs_y);
+void round_layout(Taffy& tree, NodeId node_id, float cumulative_x, float cumulative_y);
 
 // -----------------------------------------------------------------------------
 
@@ -82,6 +82,8 @@ inline Result<void, TaffyError> taffy_tree::compute_layout(
     const Size<AvailableSpace>& available_space
 )
 {
+    taffy.is_layouting = true;
+
     // Recursively compute node layout
     const auto size_and_baselines = taffy_tree::perform_node_layout(
         taffy,
@@ -100,6 +102,8 @@ inline Result<void, TaffyError> taffy_tree::compute_layout(
     if( taffy.config.use_rounding ) {
         taffy::round_layout(taffy, root, 0.0f, 0.0f);
     }
+
+    taffy.is_layouting = false;
 
     return Result<void, TaffyError>::Ok();
 }
@@ -262,6 +266,7 @@ inline SizeBaselinesAndMargins compute_node_layout(
         #if defined(TAFFY_FEATURE_DEBUG) || defined(TAFFY_FEATURE_PROFILE)
         NODE_LOGGER.pop_node();
         #endif // TAFFY_FEATURE_DEBUG || TAFFY_FEATURE_PROFILE
+
         return cached_size_and_baselines_opt.value();
     }
 
@@ -393,30 +398,37 @@ inline void perform_taffy_tree_hidden_layout(Taffy& tree, NodeId node)
 }
 
 /// Rounds the calculated [`Layout`] to exact pixel values
+///
 /// In order to ensure that no gaps in the layout are introduced we:
-///   - Always round based on the absolute coordinates rather than parent-relative coordinates
+///   - Always round based on the cumulative x/y coordinates (relative to the viewport) rather than
+///     parent-relative coordinates
 ///   - Compute width/height by first rounding the top/bottom/left/right and then computing the difference
 ///     rather than rounding the width/height directly
-///
 /// See <https://github.com/facebook/yoga/commit/aa5b296ac78f7a22e1aeaf4891243c6bb76488e2> for more context
+///
+/// In order to prevent innacuracies caused by rounding already-rounded values, we read from `unrounded_layout`
+/// and write to `final_layout`.
 /* RUST
-    fn round_layout(tree: &mut impl LayoutTree, node: NodeId, abs_x: f32, abs_y: f32)
+    fn round_layout(tree: &mut Taffy, node_id: NodeId, cumulative_x: f32, cumulative_y: f32)
 */
-inline void round_layout(LayoutTree& tree, NodeId node, float abs_x, float abs_y)
+inline void round_layout(Taffy& tree, NodeId node_id, float cumulative_x, float cumulative_y)
 {
-    auto& layout = tree.impl_layout_mut(node);
-    const auto _abs_x = abs_x + layout.location.x;
-    const auto _abs_y = abs_y + layout.location.y;
+    auto& node = tree.nodes[node_id_into_key(node_id)];
+    const auto& unrounded_layout = node.unrounded_layout;
+    auto& layout = node.final_layout;
 
-    layout.location.x = round(layout.location.x);
-    layout.location.y = round(layout.location.y);
-    layout.size.width = round(_abs_x + layout.size.width) - round(_abs_x);
-    layout.size.height = round(_abs_y + layout.size.height) - round(_abs_y);
+    const auto _cumulative_x = cumulative_x + unrounded_layout.location.x;
+    const auto _cumulative_y = cumulative_y + unrounded_layout.location.y;
 
-    const auto child_count = tree.impl_child_count(node);
+    layout.location.x = round(unrounded_layout.location.x);
+    layout.location.y = round(unrounded_layout.location.y);
+    layout.size.width = round(_cumulative_x + unrounded_layout.size.width) - round(_cumulative_x);
+    layout.size.height = round(_cumulative_y + unrounded_layout.size.height) - round(_cumulative_y);
+
+    const auto child_count = tree.child_count(node_id).unwrap();
     for(size_t index = 0; index < child_count; ++index) {
-        const auto child = tree.impl_child(node, index);
-        round_layout(tree, child, _abs_x, _abs_y);
+        const auto child = tree.impl_child(node_id, index);
+        round_layout(tree, child, _cumulative_x, _cumulative_y);
     }
 }
 
