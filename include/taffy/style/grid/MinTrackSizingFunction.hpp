@@ -96,10 +96,11 @@ public:
 
     constexpr bool operator == (const MinTrackSizingFunction& other) const
     {
-        return (_type == other._type) ?
+        return
+            (_type == other._type) ?
                 (_type == Type::Fixed) ?
-                    (_value == _value)
-                : // Type::MinContent || Type::MaxContent || TypeAuto
+                    (_value == other._value)
+                : // Type::MinContent || Type::MaxContent || Type::Auto
                     true
             : // types not the same
                 false;
