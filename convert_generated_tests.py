@@ -203,14 +203,14 @@ def replace_property_Option_Float(search_var_name, output_var_name, content):
 # property : Some ( taffy :: style :: AlignItems :: Enum ), --> property = Some(AlignItems::Enum);
 def replace_property_Option_AlignItems(search_var_name, output_var_name, content):
     return re.sub(
-        search_var_name + '\s*:\s*Some\s*\(\s*taffy\s*::\s*style\s*::\s*AlignItems\s*::\s*(\S+)\s*\)\s*,',
+        search_var_name + r'\s*:\s*Some\s*\(\s*taffy\s*::\s*style\s*::\s*AlignItems\s*::\s*(\S+)\s*\)\s*,',
         output_var_name + r' = Some(AlignItems::\1);',
         content)
 
 # property : Some ( taffy :: style :: AlignSelf :: Enum ), --> property = Some(AlignSelf::Enum);
 def replace_property_Option_AlignSelf(search_var_name, output_var_name, content):
     return re.sub(
-        search_var_name + '\s*:\s*Some\s*\(\s*taffy\s*::\s*style\s*::\s*AlignSelf\s*::\s*(\S+)\s*\)\s*,',
+        search_var_name + r'\s*:\s*Some\s*\(\s*taffy\s*::\s*style\s*::\s*AlignSelf\s*::\s*(\S+)\s*\)\s*,',
         output_var_name + r' = Some(AlignSelf::\1);',
         content)
 
@@ -245,14 +245,14 @@ def replace_property_Option_JustifyItems(search_var_name, output_var_name, conte
 # property : taffy :: style :: FlexDirection :: Enum , --> property = FlexDirection::Enum;
 def replace_property_FlexDirection(search_var_name, output_var_name, content):
     return re.sub(
-        search_var_name + '\s*:\s*taffy\s*::\s*style\s*::\s*FlexDirection\s*::\s*(Row|Column|RowReverse|ColumnReverse)\s*,',
+        search_var_name + r'\s*:\s*taffy\s*::\s*style\s*::\s*FlexDirection\s*::\s*(Row|Column|RowReverse|ColumnReverse)\s*,',
         output_var_name + r' = FlexDirection::\1();',
         content)
 
 # property : taffy :: style :: FlexWrap :: Enum , --> property = FlexWrap::Enum;
 def replace_property_FlexWrap(search_var_name, output_var_name, content):
     return re.sub(
-        search_var_name + '\s*:\s*taffy\s*::\s*style\s*::\s*FlexWrap\s*::\s*(NoWrap|Wrap|WrapReverse)\s*,',
+        search_var_name + r'\s*:\s*taffy\s*::\s*style\s*::\s*FlexWrap\s*::\s*(NoWrap|Wrap|WrapReverse)\s*,',
         output_var_name + r' = FlexWrap::\1();',
         content)
 
@@ -450,7 +450,7 @@ def replace_property_Rect_LengthPercentage(search_var_name, output_var_name, con
 
         return output_var_name + r' = Rect<LengthPercentage> { ' + rect_content + ' };'
 
-    return re.sub(search_var_name + r'\s*:\s*taffy\s*::\s*geometry\s*::\s*Rect\s*\{([^\}]+)},', replace, content, flags=re.MULTILINE)
+    return re.sub(search_var_name + r'\s*:\s*taffy\s*::\s*geometry\s*::\s*Rect\s*\{([^\}]+)}\s*,', replace, content, flags=re.MULTILINE)
 
 def replace_property_Rect_LengthPercentageAuto(search_var_name, output_var_name, content):
 
@@ -487,7 +487,7 @@ def replace_property_Rect_LengthPercentageAuto(search_var_name, output_var_name,
 
         return output_var_name + r' = Rect<LengthPercentageAuto> { ' + rect_content + ' };'
 
-    return re.sub(search_var_name + r'\s*:\s*taffy\s*::\s*geometry\s*::\s*Rect\s*\{([^\}]+)},', replace, content, flags=re.MULTILINE)
+    return re.sub(search_var_name + r'\s*:\s*taffy\s*::\s*geometry\s*::\s*Rect\s*\{([^\}]+)}\s*,', replace, content, flags=re.MULTILINE)
 
 def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_var_name, content):
 
@@ -512,23 +512,23 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
 
         # minmax( length(???), length(???) )
         vec_content = re.sub(
-            r'minmax\s*\(\s*length\s*\((\S+)\),\s*length\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*length\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(length<MinTrackSizingFunction>(\1), length<MaxTrackSizingFunction>(\2))',
             vec_content)
         
         # minmax( length(???), (min|max)_content() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*length\s*\((\S+)\),\s*min_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*min_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(length<MinTrackSizingFunction>(\1), min_content<MaxTrackSizingFunction>())',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*length\s*\((\S+)\),\s*max_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*max_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(length<MinTrackSizingFunction>(\1), max_content<MaxTrackSizingFunction>())',
             vec_content)
 
         # minmax( length(???), auto() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*length\s*\((\S+)\),\s*auto\s*\(\)\s*\)',
+            r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*auto\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(length<MinTrackSizingFunction>(\1), Auto<MaxTrackSizingFunction>())',
             vec_content)
 
@@ -537,21 +537,21 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
         
         # minmax( auto(), length|percent() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*auto\s*\(\),\s*length\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*auto\s*\(\)\s*,\s*length\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(Auto<MinTrackSizingFunction>(), length<MaxTrackSizingFunction>(\1))',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*auto\s*\(\),\s*percent\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*auto\s*\(\)\s*,\s*percent\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(Auto<MinTrackSizingFunction>(), percent<MaxTrackSizingFunction>(\1))',
             vec_content)
 
         # minmax( auto(), (min|max)_content() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*auto\s*\(\),\s*min_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*auto\s*\(\)\s*,\s*min_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(Auto<MinTrackSizingFunction>(), min_content<MaxTrackSizingFunction>())',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*auto\s*\(\),\s*max_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*auto\s*\(\)\s*,\s*max_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(Auto<MinTrackSizingFunction>(), max_content<MaxTrackSizingFunction>())',
             vec_content)
 
@@ -560,27 +560,27 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
 
         # minmax( max_content(), fr(???)|auto() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*max_content\s*\(\),\s*fr\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*max_content\s*\(\)\s*,\s*fr\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(max_content<MinTrackSizingFunction>(), fr<MaxTrackSizingFunction>(\1))',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*max_content\s*\(\),\s*auto\s*\(\)\s*\)',
+            r'minmax\s*\(\s*max_content\s*\(\)\s*,\s*auto\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(max_content<MinTrackSizingFunction>(), Auto<MaxTrackSizingFunction>())',
             vec_content)
 
         # minmax( max_content(), length|percent(???) )
         vec_content = re.sub(
-            r'minmax\s*\(\s*max_content\s*\(\),\s*length\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*max_content\s*\(\)\s*,\s*length\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(max_content<MinTrackSizingFunction>(), length<MaxTrackSizingFunction>(\1))',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*max_content\s*\(\),\s*percent\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*max_content\s*\(\)\s*,\s*percent\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(max_content<MinTrackSizingFunction>(), percent<MaxTrackSizingFunction>(\1))',
             vec_content)
 
         # minmax( max_content(), min_content() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*max_content\s*\(\),\s*min_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*max_content\s*\(\)\s*,\s*min_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(max_content<MinTrackSizingFunction>(), min_content<MaxTrackSizingFunction>())',
             vec_content)
 
@@ -589,27 +589,27 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
 
         # minmax( min_content(), fr(???)|auto )
         vec_content = re.sub(
-            r'minmax\s*\(\s*min_content\s*\(\),\s*fr\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*min_content\s*\(\)\s*,\s*fr\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(min_content<MinTrackSizingFunction>(), fr<MaxTrackSizingFunction>(\1))',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*min_content\s*\(\),\s*auto\s*\(\)\s*\)',
+            r'minmax\s*\(\s*min_content\s*\(\)\s*,\s*auto\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(min_content<MinTrackSizingFunction>(), Auto<MaxTrackSizingFunction>())',
             vec_content)
 
         # minmax( min_content(), length|percent(???) )
         vec_content = re.sub(
-            r'minmax\s*\(\s*min_content\s*\(\),\s*length\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*min_content\s*\(\)\s*,\s*length\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(min_content<MinTrackSizingFunction>(), length<MaxTrackSizingFunction>(\1))',
             vec_content)
         vec_content = re.sub(
-            r'minmax\s*\(\s*min_content\s*\(\),\s*percent\s*\((\S+)\)\s*\)',
+            r'minmax\s*\(\s*min_content\s*\(\)\s*,\s*percent\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(min_content<MinTrackSizingFunction>(), percent<MaxTrackSizingFunction>(\1))',
             vec_content)
 
         # minmax( min_content(), max_content() )
         vec_content = re.sub(
-            r'minmax\s*\(\s*min_content\s*\(\),\s*max_content\s*\(\)\s*\)',
+            r'minmax\s*\(\s*min_content\s*\(\)\s*,\s*max_content\s*\(\)\s*\)',
             r'minmax<TrackSizingFunction>(min_content<MinTrackSizingFunction>(), max_content<MaxTrackSizingFunction>())',
             vec_content)
 
@@ -896,7 +896,7 @@ def replace_assert(content: str) -> str:
         return 'REQUIRE_MESSAGE(' + expression + ', ' + message + ');'
 
     return re.sub(
-        r'assert!\(([^,]+),\s*(\"[^\"]+\"),\s*([^\)]+)\);',
+        r'assert!\s*\(([^,]+)\s*,\s*(\"[^\"]+\")\s*,\s*([^\)]+)\)\s*;',
         replace,
         content)
 
