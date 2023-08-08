@@ -76,7 +76,7 @@ Vec<FlexLine> collect_flex_lines(
 
 void determine_container_main_size(
     LayoutTree& tree,
-    AvailableSpace main_axis_available_space,
+    const Size<AvailableSpace>& available_space,
     Vec<FlexLine>& lines,
     AlgoConstants& constants
 );
@@ -299,6 +299,9 @@ inline SizeBaselinesAndMargins compute_preliminary(
 
     // If container size is undefined, determine the container's main size
     // and then re-resolve gaps based on newly determined size
+    #if defined(TAFFY_FEATURE_DEBUG)
+    NODE_LOGGER.log("determine_container_main_size");
+    #endif // TAFFY_FEATURE_DEBUG
     const auto original_gap = constants.gap;
     const auto inner_main_size_option = constants.node_inner_size.main(constants.dir);
     if( inner_main_size_option.is_some() ) {
@@ -309,9 +312,14 @@ inline SizeBaselinesAndMargins compute_preliminary(
         constants.container_size.set_main(constants.dir, outer_main_size);
     } else {
         // Sets constants.container_size and constants.outer_container_size
-        determine_container_main_size(tree, _available_space.main(constants.dir), flex_lines, constants);
+        determine_container_main_size(tree, _available_space, flex_lines, constants);
         constants.node_inner_size.set_main(constants.dir, Some(constants.inner_container_size.main(constants.dir)));
         constants.node_outer_size.set_main(constants.dir, Some(constants.container_size.main(constants.dir)));
+
+        #if defined(TAFFY_FEATURE_DEBUG)
+        NODE_LOGGER.labelled_debug_log("constants.node_outer_size", constants.node_outer_size);
+        NODE_LOGGER.labelled_debug_log("constants.node_inner_size", constants.node_inner_size);
+        #endif // TAFFY_FEATURE_DEBUG
 
         // Re-resolve percentage gaps
         const auto& style = tree.impl_style(node);
@@ -812,7 +820,7 @@ inline void determine_flex_base_size(
                             const auto child_available_space_2 = MaybeMath(child_available_space_1)
                                 .maybe_clamp(child_min_cross, child_max_cross);
 
-                            return MaybeMath(child_available_space_2).maybe_sub(constants.margin.cross_axis_sum(dir));
+                            return MaybeMath(child_available_space_2).maybe_sub(child.margin.cross_axis_sum(dir));
                         }()
                     );
                 }
@@ -1002,22 +1010,24 @@ inline Vec<FlexLine> collect_flex_lines(
 /* RUST
     fn determine_container_main_size(
         tree: &mut impl LayoutTree,
-        main_axis_available_space: AvailableSpace,
+        available_space: Size<AvailableSpace>,
         lines: &mut Vec<FlexLine<'_>>,
         constants: &mut AlgoConstants,
     )
 */
 inline void determine_container_main_size(
     LayoutTree& tree,
-    AvailableSpace main_axis_available_space,
+    const Size<AvailableSpace>& available_space,
     Vec<FlexLine>& lines,
     AlgoConstants& constants
 )
 {
+    const auto dir = constants.dir;
     const auto main_content_box_inset = constants.content_box_inset.main_axis_sum(constants.dir);
 
     const float outer_main_size = constants.node_outer_size.main(constants.dir).unwrap_or_else(
     [&] {
+        const auto main_axis_available_space = available_space.main(dir);
         if(main_axis_available_space.type() == AvailableSpace::Type::Definite)
         {
             const float longest_line_length = [&] {
@@ -1116,6 +1126,23 @@ inline void determine_container_main_size(
                         // min- or max- content contributuon
                         else
                         {
+                            // Parent size for child sizing
+                            const auto cross_axis_parent_size = constants.node_inner_size.cross(dir);
+
+                            // Available space for child sizing
+                            const auto cross_axis_margin_sum = constants.margin.cross_axis_sum(dir);
+                            const auto child_min_cross = MaybeMath(item.min_size.cross(dir)).maybe_add(cross_axis_margin_sum);
+                            const auto child_max_cross = MaybeMath(item.max_size.cross(dir)).maybe_add(cross_axis_margin_sum);
+                            const AvailableSpace cross_axis_available_space =
+                                MaybeMath(
+                                    available_space
+                                    .cross(dir)
+                                    .map_definite_value([&](float val) { return cross_axis_parent_size.unwrap_or(val); })
+                                )
+                                .maybe_clamp(child_min_cross, child_max_cross);
+
+                            const auto child_available_space = available_space.with_cross(dir, cross_axis_available_space);
+
                             // Either the min- or max- content size depending on which constraint we are sizing under.
                             // TODO: Optimise by using already computed values where available
                             const auto content_main_size = tree
@@ -1123,7 +1150,7 @@ inline void determine_container_main_size(
                                     item.node,
                                     Size<Option<float>>::NONE(),
                                     constants.node_inner_size,
-                                    Size<AvailableSpace> { main_axis_available_space, main_axis_available_space },
+                                    child_available_space,
                                     SizingMode::InherentSize,
                                     Line<bool>::FALSE()
                                 )

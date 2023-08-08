@@ -244,6 +244,7 @@ inline SizeBaselinesAndMargins compute(
 
     // Note: both horizontal and vertical percentage padding/borders are resolved against the container's inline size (i.e. width).
     // This is not a bug, but is how CSS is specified (see: https://developer.mozilla.org/en-US/docs/Web/CSS/padding#values)
+    const auto margin = ResolveOrZero(style.margin).resolve_or_zero(parent_size.width);
     const auto padding = ResolveOrZero(style.padding).resolve_or_zero(parent_size.width);
     const auto border = ResolveOrZero(style.border).resolve_or_zero(parent_size.height);
     const auto padding_border = padding + border;
@@ -307,15 +308,16 @@ inline SizeBaselinesAndMargins compute(
     if( measurable != nullptr )
     {
         // Compute available space
-        const Size<AvailableSpace> _available_space {
-            available_space
-                .width.maybe_set(node_size.width)
+        const auto _available_space = Size<AvailableSpace> {
+            MaybeMath(available_space.width)
+                .maybe_sub(margin.horizontal_axis_sum())
+                .maybe_set(node_size.width)
                 .maybe_set(node_max_size.width)
                 .map_definite_value([&](float size) {
                     return MaybeMath(size).maybe_clamp(node_min_size.width, node_max_size.width) - content_box_inset.horizontal_axis_sum();
                 }),
-            available_space
-                .height
+            MaybeMath(available_space.height)
+                .maybe_sub(margin.vertical_axis_sum())
                 .maybe_set(node_size.height)
                 .maybe_set(node_max_size.height)
                 .map_definite_value([&](float size) {
