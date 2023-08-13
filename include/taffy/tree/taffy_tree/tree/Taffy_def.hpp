@@ -308,6 +308,7 @@ struct Taffy
             }
         }
 
+        // Remove "parent" references to a node when removing that node
         {
             const auto* children_opt = this->children.get(key);
             if(children_opt != nullptr) {

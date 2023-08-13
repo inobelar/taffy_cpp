@@ -234,9 +234,6 @@ TEST_CASE("remove_child_at_index" * doctest::test_suite("tree"))
     REQUIRE(taffy.child_count(node).unwrap() == 0);
 }
 
-/*
-    NOTE: COMMENTED, until https://github.com/DioxusLabs/taffy/pull/512 not merged
-
 // Related to: https://github.com/DioxusLabs/taffy/issues/510
 TEST_CASE("remove_child_updates_parents" * doctest::test_suite("tree"))
 {
@@ -252,7 +249,6 @@ TEST_CASE("remove_child_updates_parents" * doctest::test_suite("tree"))
     // Once the parent is removed this shouldn't panic.
     REQUIRE(taffy.set_children(child, {}).is_ok());
 }
-*/
 
 TEST_CASE("replace_child_at_index" * doctest::test_suite("tree"))
 {
@@ -269,6 +265,7 @@ TEST_CASE("replace_child_at_index" * doctest::test_suite("tree"))
     REQUIRE(taffy.child_count(node).unwrap() == 1);
     REQUIRE(taffy.Children(node).unwrap()[0] == child1);
 }
+
 TEST_CASE("test_child_at_index" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();
@@ -281,6 +278,7 @@ TEST_CASE("test_child_at_index" * doctest::test_suite("tree"))
     REQUIRE([&] {const auto result = taffy.child_at_index(node, 1); return result.is_ok() ? result.value() == child1 : false; }());
     REQUIRE([&] {const auto result = taffy.child_at_index(node, 2); return result.is_ok() ? result.value() == child2 : false; }());
 }
+
 TEST_CASE("test_child_count" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();
@@ -309,6 +307,7 @@ TEST_CASE("test_children" * doctest::test_suite("tree"))
 
     REQUIRE(taffy.Children(child0).unwrap().empty());
 }
+
 TEST_CASE("test_set_style" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();
@@ -319,6 +318,7 @@ TEST_CASE("test_set_style" * doctest::test_suite("tree"))
     taffy.set_style(node, StyleBuilder([](Style& s) { s.display = Display::None(); })).unwrap();
     REQUIRE(taffy.style(node).unwrap().get().display.type() == Display::Type::None);
 }
+
 TEST_CASE("test_style" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();
@@ -331,6 +331,7 @@ TEST_CASE("test_style" * doctest::test_suite("tree"))
     REQUIRE(res.is_ok());
     REQUIRE(res.unwrap().get() == style);
 }
+
 TEST_CASE("test_layout" * doctest::test_suite("tree"))
 {
     auto taffy = Taffy::New();
