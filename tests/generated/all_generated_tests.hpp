@@ -702,6 +702,15 @@
   #include "grid_auto_takes_precedence_over_fr.hpp"
 #endif // TAFFY_FEATURE_GRID
 #if defined(TAFFY_FEATURE_GRID)
+  #include "grid_available_space_greater_than_max_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_available_space_smaller_than_max_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_available_space_smaller_than_min_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
   #include "grid_basic.hpp"
 #endif // TAFFY_FEATURE_GRID
 #if defined(TAFFY_FEATURE_GRID)
@@ -895,6 +904,18 @@
 #endif // TAFFY_FEATURE_GRID
 #if defined(TAFFY_FEATURE_GRID)
   #include "grid_max_content_single_item_span_2_gap_percent_indefinite.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_max_width_greater_than_max_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_max_width_less_than_max_content_with_min_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_max_width_smaller_than_max_content.hpp"
+#endif // TAFFY_FEATURE_GRID
+#if defined(TAFFY_FEATURE_GRID)
+  #include "grid_max_width_smaller_than_min_content.hpp"
 #endif // TAFFY_FEATURE_GRID
 #if defined(TAFFY_FEATURE_GRID)
   #include "grid_min_content_flex_column.hpp"

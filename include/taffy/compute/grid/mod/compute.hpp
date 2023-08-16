@@ -181,18 +181,14 @@ inline SizeBaselinesAndMargins compute(
     content_box_inset.bottom += scrollbar_gutter.y;
 
     const auto constrained_available_space =
-        MaybeMath( known_dimensions.Or(size) )
-        .maybe_clamp(min_size, max_size)
-        .map<Option<AvailableSpace>>([](const Option<float>& size) { return size.map<AvailableSpace>([](float value) { return AvailableSpace::Definite(value); }); })
-        .unwrap_or(available_space.map<AvailableSpace>([](const AvailableSpace& space) {
-            return
-                // Available grid space should not depend on Definite available space as a grid is allowed
-                // to expand beyond it's available space
-                (space.type() == AvailableSpace::Type::Definite) ?
-                    AvailableSpace::MaxContent()
-                : // _
-                    space;
-        }));
+        MaybeMath(
+            MaybeMath(
+                known_dimensions
+                .Or(size)
+                .map<Option<AvailableSpace>>([](const Option<float>& size) { return size.map<AvailableSpace>([](float value) { return AvailableSpace::Definite(value); }); })
+                .unwrap_or(available_space)
+            ).maybe_clamp(min_size, max_size)
+        ).maybe_max(padding_border_size);
 
     const auto available_grid_space = Size<AvailableSpace> {
         /*width:*/ constrained_available_space
@@ -203,7 +199,7 @@ inline SizeBaselinesAndMargins compute(
             .map_definite_value([&](float space) { return space - content_box_inset.vertical_axis_sum(); })
     };
 
-    const auto outer_node_size = known_dimensions.Or(MaybeMath(size).maybe_clamp(min_size, max_size).Or(min_size));
+    const auto outer_node_size = MaybeMath(MaybeMath(known_dimensions.Or(size)).maybe_clamp(min_size, max_size)).maybe_max(padding_border_size);
     auto inner_node_size = Size<Option<float>> {
         outer_node_size.width.map<float>([&](float space) { return space - content_box_inset.horizontal_axis_sum(); }),
         outer_node_size.height.map<float>([&](float space) { return space - content_box_inset.vertical_axis_sum(); })
@@ -266,6 +262,11 @@ inline SizeBaselinesAndMargins compute(
     );
     const auto initial_row_sum = map_and_sum<float>(rows, [](const GridTrack& track) { return track.base_size; });
     inner_node_size.height = inner_node_size.height.or_else([&] { return Option<float>{initial_row_sum}; });
+
+    #if defined(TAFFY_FEATURE_DEBUG)
+    NODE_LOGGER.labelled_debug_log("initial_column_sum", initial_column_sum);
+    NODE_LOGGER.labelled_debug_log("initial_row_sum", initial_row_sum);
+    #endif // TAFFY_FEATURE_DEBUG
 
     // 6. Compute container size
     const auto resolved_style_size = known_dimensions.Or(MaybeResolve(style.size).maybe_resolve(parent_size));

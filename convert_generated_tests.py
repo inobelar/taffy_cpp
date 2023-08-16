@@ -79,7 +79,7 @@ def remove_func_trailing_comma_and_add_semicolon(func_name: str, content: str):
             start_index_number = found_index + func_name_len # shift search-start for the next iteration
 
         # ----------------------------------------------------------------------
-        
+
         brackets_stack = []
         comma_indexes_to_remove = []
 
@@ -112,7 +112,7 @@ def remove_func_trailing_comma_and_add_semicolon(func_name: str, content: str):
                 if is_empty(brackets_stack):
 
                     # ----------------------------------------------------------
-                    # Additional traversing for inserting ';' after function 
+                    # Additional traversing for inserting ';' after function
                     # call, if it's needed
                     for i in range(index+1, len(content)):
                         if content[i] == ' ' or content[i] == '\n':
@@ -142,7 +142,7 @@ def remove_func_trailing_comma_and_add_semicolon(func_name: str, content: str):
                 else:
                     if get_top(brackets_stack) == '{':
                         brackets_stack.pop()
-                    else: 
+                    else:
                         raise Exception('Wrong brackets pairs: found bracket "}", but previous bracket is not "{"')
             elif content[index] == ']':
                 if is_empty(brackets_stack):
@@ -150,7 +150,7 @@ def remove_func_trailing_comma_and_add_semicolon(func_name: str, content: str):
                 else:
                     if get_top(brackets_stack) == '[':
                         brackets_stack.pop()
-                    else: 
+                    else:
                         raise Exception('Wrong brackets pairs: found bracket "]", but previous bracket is not "["')
 
 
@@ -172,7 +172,7 @@ def remove_func_trailing_comma_and_add_semicolon(func_name: str, content: str):
 
             for i in comma_indexes_to_remove:
                 # content_mutable[i] = '@' # <-- for debug
-                del content_mutable[i] 
+                del content_mutable[i]
 
             content = ''.join(content_mutable)  # 'list' --> 'str'
 
@@ -515,7 +515,7 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
             r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*length\s*\((\S+)\)\s*\)',
             r'minmax<TrackSizingFunction>(length<MinTrackSizingFunction>(\1), length<MaxTrackSizingFunction>(\2))',
             vec_content)
-        
+
         # minmax( length(???), (min|max)_content() )
         vec_content = re.sub(
             r'minmax\s*\(\s*length\s*\((\S+)\)\s*,\s*min_content\s*\(\)\s*\)',
@@ -534,7 +534,7 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         # auto() first
-        
+
         # minmax( auto(), length|percent() )
         vec_content = re.sub(
             r'minmax\s*\(\s*auto\s*\(\)\s*,\s*length\s*\((\S+)\)\s*\)',
@@ -658,8 +658,8 @@ def replace_property_GridTrackVec_TrackSizingFunction(search_var_name, output_va
         return output_var_name + r' = GridTrackVec<TrackSizingFunction> { ' + vec_content + ' };'
 
     return re.sub(
-        search_var_name + r'\s*:\s*vec\!\[([^\]]+)\]\s*,', 
-        replace, 
+        search_var_name + r'\s*:\s*vec\!\[([^\]]+)\]\s*,',
+        replace,
         content)
 
 def replace_property_GridTrackVec_NonRepeatedTrackSizingFunction(search_var_name, output_var_name, content):
@@ -676,8 +676,8 @@ def replace_property_GridTrackVec_NonRepeatedTrackSizingFunction(search_var_name
         return output_var_name + r' = GridTrackVec<NonRepeatedTrackSizingFunction> { ' + vec_content + ' };'
 
     return re.sub(
-        search_var_name + r'\s*:\s*vec\!\[([^\]]+)\]\s*,', 
-        replace, 
+        search_var_name + r'\s*:\s*vec\!\[([^\]]+)\]\s*,',
+        replace,
         content)
 
 
@@ -930,8 +930,8 @@ def convert_test_content(file_content):
 
     # &[node0, node1] --> mkVec(node0, node1)
     file_content = re.sub(
-        r'\&\[([^\]]+)\]', 
-        replace_slice, 
+        r'\&\[([^\]]+)\]',
+        replace_slice,
         file_content)
 
     # println!() --> puts("")
@@ -949,8 +949,8 @@ def convert_test_content(file_content):
         file_content)
 
     file_content = re.sub(
-        r'const\s*TEXT\s*:\s*\&\s*str\s*=\s*\"([^\"]+)\"\s*\;', 
-        replace_unicode, 
+        r'const\s*TEXT\s*:\s*\&\s*str\s*=\s*\"([^\"]+)\"\s*\;',
+        replace_unicode,
         file_content)
 
     file_content = re.sub(
@@ -970,9 +970,33 @@ def convert_test_content(file_content):
 
 
     file_content = re.sub(
-        r'compute_layout\(node, taffy::geometry::Size::MAX_CONTENT\)',
+        r'compute_layout\s*\(\s*node\s*,\s*taffy\s*::\s*geometry\s*::\s*Size\s*::\s*MAX_CONTENT\s*\)',
         r'compute_layout(node, Size<AvailableSpace>::MAX_CONTENT())',
         file_content)
+    # Convert
+    #  .compute_layout(
+    #      node,
+    #      taffy::geometry::Size {
+    #          width: taffy::style::AvailableSpace::Definite(???),
+    #          height: taffy::style::AvailableSpace::MaxContent,
+    #      },
+    #  )
+    # into
+    #   .compute_layout(node, Size<AvailableSpace>{ AvailableSpace::Definite(???), AvailableSpace::MaxContent() })
+    #
+    # Its currently 'hardcoded', since its rare case. But in future it may be
+    # changed and we need for it something more generic :)
+    file_content = re.sub(
+        r'compute_layout\s*\(\s*node\s*,\s*' + \
+            r'taffy\s*::\s*geometry\s*::\s*Size\s*{\s*' + \
+                r'width\s*:\s*taffy\s*::\s*style\s*::\s*AvailableSpace\s*::\s*Definite\s*\(([^\)]+)\)\s*,\s*' + \
+                r'height\s*:\s*taffy\s*::\s*style\s*::\s*AvailableSpace\s*::\s*MaxContent\s*,\s*' + \
+            r'}\s*,\s*' + \
+        r'\)'
+        ,
+        r'compute_layout(node, Size<AvailableSpace>{ AvailableSpace::Definite(\1), AvailableSpace::MaxContent() })',
+        file_content)
+
 
     # simply to convert &taffy --> taffy (witout ampersand)
     file_content = re.sub(
@@ -987,8 +1011,8 @@ def convert_test_content(file_content):
     )
 
     file_content = re.sub(
-        r'taffy::Taffy::new\(\)', 
-        r'Taffy::New()', 
+        r'taffy::Taffy::new\(\)',
+        r'Taffy::New()',
         file_content)
 
     try:
