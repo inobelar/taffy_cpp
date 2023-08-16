@@ -21,14 +21,16 @@ int main()
         Vec<NodeId>{child}
     ).unwrap();
 
+    puts("Compute layout with 100x100 viewport:");
     taffy.compute_layout(
         node,
         Size<AvailableSpace> { AvailableSpace::Definite(100.0f), AvailableSpace::Definite(100.0f) }
     ).unwrap();
+    printf("node: %s\n",  Debug( taffy.layout(node ).unwrap().get() ).c_str());
+    printf("child: %s\n", Debug( taffy.layout(child).unwrap().get() ).c_str());
 
-    // or just use undefined for 100 x 100
-    // taffy.compute_layout(node, Size<AvailableSpace>::NONE()).unwrap();
-
+    puts("Compute layout with undefined (infinite) viewport:");
+    taffy.compute_layout(node, Size<AvailableSpace>::MAX_CONTENT()).unwrap();
     printf("node: %s\n",  Debug( taffy.layout(node ).unwrap().get() ).c_str());
     printf("child: %s\n", Debug( taffy.layout(child).unwrap().get() ).c_str());
 
