@@ -4,6 +4,8 @@
 
 :heavy_exclamation_mark: This project currently in 'Work In Progress' state :heavy_exclamation_mark:
 
+[Web Playground](https://inobelar.github.io/emscripten_samples/sample_Taffy_cpp_Playground.html)
+
 </div>
 
 This library is a port of excellent Rust-written [Taffy][taffy_url] UI layout
