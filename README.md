@@ -58,12 +58,14 @@ that repository is the reason why `taffy_cpp` even exists.
 
 Notice, that [Taffy][taffy_url] in the future may have FFI interface (exposing
 its API via C interface - for bindings with other languages), and
-[gccrs](https://github.com/Rust-GCC/gccrs) promisingly evolve, but `taffy_cpp`
-still may be needed for those, who prefer simple C++ alternative.
+[gccrs](https://github.com/Rust-GCC/gccrs) & 
+[rustc_codegen_gcc](https://github.com/rust-lang/rustc_codegen_gcc) developing
+promisingly, but `taffy_cpp` still may be needed for those, who prefer simple
+C++ alternative.
 
 Also, you can consider `taffy_cpp` as an alternative to the well-known 
-[Yoga](https://github.com/facebook/yoga) (which is also written in C++, but
-supported by a big company and used in many projects in various languages).
+[Yoga](https://github.com/facebook/yoga) library (which is also written in C++,
+but supported by a big company and used in many projects in various languages).
 
 ## Version
 
@@ -100,9 +102,10 @@ read [third_party/README.md](./third_party/README.md).
 
 - **Question**: Why it written in `C++11` over modern `C++17`/`C++20`/etc ?
 - **Answer**: First of all, in `C++11`, the minimum necessary things were 
-  introduced to make the C++ code look (and behave) like original Taffy Rust 
-  implementation: lambdas, (good) templates, scoped enumerations, constexpr 
-  functions, type traits, SFINAE, auto type deduction, etc.
+  introduced to make the C++ code look (and behave) like original 
+  [Taffy][taffy_url] Rust implementation: lambdas, (good) templates, scoped 
+  enumerations, constexpr functions, type traits, SFINAE, auto type deduction, 
+  move semantics, etc.
   That's why `C++98` was not used :D
 
   Low requirements for C++ support in compilers means wider code 
